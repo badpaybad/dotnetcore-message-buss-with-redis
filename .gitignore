@@ -3,3 +3,11 @@
 ################################################################################
 
 /.vs/RedisUsage
+/RedisUsage.Commands/bin/Debug/netcoreapp2.1
+/RedisUsage.Commands/obj
+/RedisUsage.ConsoleHandle/bin/Debug/netcoreapp2.1
+/RedisUsage.ConsoleHandle/obj
+/RedisUsage.RedisServices/bin/Debug/netcoreapp2.1
+/RedisUsage.RedisServices/obj
+/RedisUsage.Test/bin/Debug/netcoreapp2.1
+/RedisUsage.Test/obj

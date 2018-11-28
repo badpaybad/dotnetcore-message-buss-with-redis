@@ -2,29 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace RedisUsage.RedisServices
 {
-    public enum ProcessType
-    {
-        /// <summary>
-        /// Allow many worker process same data at a time
-        /// </summary>
-        PubSub,
-        /// <summary>
-        /// Allow only one worker process data at a time
-        /// </summary>
-        Queue,
-        /// <summary>
-        /// Allow only one worker process data at a time
-        /// </summary>
-        Stack
-    }
 
     public static class MessageBussServices
     {
+
+        public enum ProcessType
+        {
+            /// <summary>
+            /// Allow many worker process same data at a time
+            /// </summary>
+            PubSub,
+            /// <summary>
+            /// Allow only one worker process data at a time
+            /// </summary>
+            Queue,
+            /// <summary>
+            /// Allow only one worker process data at a time
+            /// </summary>
+            Stack
+        }
+
         const string _keyListChannelName = "MessageBussServices_ListChannelName_";
 
         static Dictionary<string, int> _mapedHandleCounter = new Dictionary<string, int>();
@@ -58,6 +59,8 @@ namespace RedisUsage.RedisServices
             }).Start();
         }
 
+        #region build key redis
+
         /// <summary>
         /// 
         /// </summary>
@@ -88,6 +91,16 @@ namespace RedisUsage.RedisServices
             return _keyListChannelName + type + "_QueueData_" + subscriberName + "_ProcessType_" + processTypeOfChannel;
         }
 
+        private static string GetProcessTypeOfChannel(string type)
+        {
+            var processTypeOfChannel = RedisServices.HashGet(_keyListChannelName, type);
+
+            if (string.IsNullOrEmpty(processTypeOfChannel)) processTypeOfChannel = ProcessType.PubSub.ToString();
+            return processTypeOfChannel;
+        }
+
+        #endregion
+
         public static void Publish<T>(T data, ProcessType processType = ProcessType.PubSub)
         {
             var type = typeof(T).FullName;
@@ -105,14 +118,13 @@ namespace RedisUsage.RedisServices
             RedisServices.HashSet(channelSubscriber, new KeyValuePair<string, string>(subscriberName, subscriberName));
 
             string channelPubSubChild = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.PubSub.ToString());
-            //regist to process
-            RedisServices.Subscribe(channelPubSubChild, (msg) =>
+            //regist to process data for data structure pubsub
+            RedisServices.Subscribe(channelPubSubChild, (data) =>
             {
-                var obj = JsonConvert.DeserializeObject<T>(msg);
-                handle(obj);
+                TryDoJob<T>(data, handle);
             });
             string channelPubSubParent = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, ProcessType.PubSub.ToString());
-            //regist to process
+            //regist to process if pubsub try dequeue get data and publish to subscriber
             RedisServices.Subscribe(channelPubSubParent, (msg) =>
             {
                 string data;
@@ -131,40 +143,47 @@ namespace RedisUsage.RedisServices
             });
 
             string channelQueue = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.Queue.ToString());
-            //regist to process
+            //regist to process if data structure is queue
             RedisServices.Subscribe(channelQueue, (msg) =>
             {
                 string data;
                 string queueDataName = GetKeyQueueDataForChannel(type);
                 while (RedisServices.TryDequeue(queueDataName, out data))
                 {
-                    var obj = JsonConvert.DeserializeObject<T>(data);
-                    handle(obj);
-                    Thread.Sleep(1);
+                    TryDoJob<T>(data, handle);
                 }
             });
 
             string channelStack = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.Stack.ToString());
-            //regist to process
+            //regist to process if data structure is stack
             RedisServices.Subscribe(channelStack, (msg) =>
             {
                 string data;
                 string queueDataName = GetKeyQueueDataForChannel(type);
                 while (RedisServices.TryPop(queueDataName, out data))
                 {
-                    var obj = JsonConvert.DeserializeObject<T>(data);
-                    handle(obj);
-                    Thread.Sleep(1);
+                    TryDoJob<T>(data, handle);
                 }
             });
         }
 
-        private static string GetProcessTypeOfChannel(string type)
+        static void TryDoJob<T>(string data, Action<T> handle)
         {
-            var processTypeOfChannel = RedisServices.HashGet(_keyListChannelName, type);
-
-            if (string.IsNullOrEmpty(processTypeOfChannel)) processTypeOfChannel = ProcessType.PubSub.ToString();
-            return processTypeOfChannel;
+            var type = typeof(T).FullName;
+            var queueName = GetKeyQueueDataForChannel(type);
+            try
+            {
+                var obj = JsonConvert.DeserializeObject<T>(data);
+                handle(obj);
+                string successQueueDataName = queueName + "_Success";
+                RedisServices.TryEnqueue(successQueueDataName, data);
+                Thread.Sleep(1);
+            }
+            catch (Exception)
+            {
+                string errorQueueDataName = queueName + "_Error";
+                RedisServices.TryEnqueue(errorQueueDataName, data);
+            }
         }
 
         public static void Unsubscribe(string channel, string subscriberName)
@@ -178,6 +197,7 @@ namespace RedisUsage.RedisServices
             RedisServices.HashDelete(channelSubscriber, subscriberName);
         }
 
+        #region worker to notify
         /// <summary>
         /// type = channel
         /// </summary>
@@ -228,49 +248,49 @@ namespace RedisUsage.RedisServices
         private static Thread CreateNotifyWorker(string type)
         {
             return new Thread(() =>
-             {
-                 while (true)
-                 {
-                     try
-                     {
-                         string queueDataName = GetKeyQueueDataForChannel(type);
+            {
+                while (true)
+                {
+                    try
+                    {
+                        string queueDataName = GetKeyQueueDataForChannel(type);
 
-                         var processTypeOfChannel = RedisServices.HashGet(_keyListChannelName, type);
-                         string channelSubscriber = GetKeySubscribersForChannel(type);
+                        var processTypeOfChannel = RedisServices.HashGet(_keyListChannelName, type);
+                        string channelSubscriber = GetKeySubscribersForChannel(type);
 
-                         var subscribers = RedisServices.HashGetAll(channelSubscriber);
+                        var subscribers = RedisServices.HashGetAll(channelSubscriber);
 
-                         if (RedisServices.QueueHasValue(queueDataName))
-                         {
-                             ProcessType processType = GetProcessTypeByName(processTypeOfChannel);
-                             if (processType == ProcessType.PubSub)
-                             {
-                                 string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, processTypeOfChannel);
-                                 //notify to parent, then parent will find subscribers to process same data
-                                 RedisServices.Publish(queueDataNameChannelSubscriber, processTypeOfChannel);
-                             }
-                             else
-                             {
-                                 foreach (var subc in subscribers)
-                                 {
-                                     string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(subc.Key, type, processTypeOfChannel);
+                        if (RedisServices.QueueHasValue(queueDataName))
+                        {
+                            ProcessType processType = GetProcessTypeByName(processTypeOfChannel);
+                            if (processType == ProcessType.PubSub)
+                            {
+                                string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, processTypeOfChannel);
+                                //notify to parent, then parent will find subscribers to process same data
+                                RedisServices.Publish(queueDataNameChannelSubscriber, processTypeOfChannel);
+                            }
+                            else
+                            {
+                                foreach (var subc in subscribers)
+                                {
+                                    string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(subc.Key, type, processTypeOfChannel);
 
-                                     RedisServices.Publish(queueDataNameChannelSubscriber, processTypeOfChannel);
-                                     //notify to subscribers to dequeue data and process
-                                 }
-                             }
-                         }
-                     }
-                     catch (Exception ex)
-                     {
-                         Console.WriteLine(ex);
-                     }
-                     finally
-                     {
-                         Thread.Sleep(100);
-                     }
-                 }
-             });
+                                    RedisServices.Publish(queueDataNameChannelSubscriber, processTypeOfChannel);
+                                    //notify to subscribers to dequeue data and process
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+            });
         }
 
         private static ProcessType GetProcessTypeByName(string processTypeName)
@@ -288,6 +308,7 @@ namespace RedisUsage.RedisServices
                 return ProcessType.PubSub;
             }
         }
+        #endregion
 
         public static void Dispose()
         {
@@ -304,5 +325,78 @@ namespace RedisUsage.RedisServices
                 }
             }
         }
+
+        #region api monitor
+
+        public static List<ChannelInfo> GetAllChannelInfo()
+        {
+            var allChannel = RedisServices.HashGetAll(_keyListChannelName);
+            return allChannel.Select(d => new ChannelInfo()
+            {
+                DataStructure = d.Value,
+                Name = d.Key,
+                Subscriber = GetSubscribers(d.Value),
+                PendingDataQueueLength = GetPendingDataQueueLength(d.Value),
+                SuccessDataQueueLength = GetSuccessDataQueueLength(d.Value),
+                ErrorDataQueueLength = GetErrorDataQueueLength(d.Value)
+            }).ToList();
+        }
+        public static ChannelInfo GetChannelInfo(string channelName)
+        {
+            var channelVal = RedisServices.HashGet(_keyListChannelName, channelName);
+            return new ChannelInfo()
+            {
+                DataStructure = channelVal,
+                Name = channelName,
+                Subscriber = GetSubscribers(channelName),
+                PendingDataQueueLength = GetPendingDataQueueLength(channelName),
+                SuccessDataQueueLength = GetSuccessDataQueueLength(channelName),
+                ErrorDataQueueLength = GetErrorDataQueueLength(channelName)
+            };
+        }
+
+        public static List<SubscriberInfo> GetSubscribers(string channelName)
+        {
+            string channelSubscriber = GetKeySubscribersForChannel(channelName);
+            var subscribers = RedisServices.HashGetAll(channelSubscriber);
+            return subscribers.Select(i => new SubscriberInfo { Name = i.Key }).ToList();
+        }
+
+        public static long GetPendingDataQueueLength(string channelName)
+        {
+            var queueName = GetKeyQueueDataForChannel(channelName);
+            return RedisServices.QueueLength(queueName);
+        }
+
+        public static long GetErrorDataQueueLength(string channelName)
+        {
+            var queueName = GetKeyQueueDataForChannel(channelName) + "_Error";
+            return RedisServices.QueueLength(queueName);
+        }
+
+        public static long GetSuccessDataQueueLength(string channelName)
+        {
+            var queueName = GetKeyQueueDataForChannel(channelName) + "_Success";
+            return RedisServices.QueueLength(queueName);
+        }
+
+        public class ChannelInfo
+        {
+            public string Name { get; set; }
+            public string DataStructure { get; set; }
+
+            public List<SubscriberInfo> Subscriber { get; set; }
+            public long PendingDataQueueLength { get; set; }
+            public long SuccessDataQueueLength { get; set; }
+            public long ErrorDataQueueLength { get; set; }
+        }
+
+        public class SubscriberInfo
+        {
+            public string Name { get; set; }
+        }
+
+        #endregion
     }
+
 }

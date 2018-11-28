@@ -220,6 +220,13 @@ namespace RedisUsage.RedisServices
             //return RedisDatabase.KeyExists(key);
         }
 
+        public static long QueueLength(string key)
+        {
+            if (RedisDatabase.KeyExists(key) == false) return 0;
+
+            return RedisDatabase.ListLength(key) ;
+        }
+
         public static bool TryEnqueue(string key, params string[] values)
         {
             if (!IsEnable)
