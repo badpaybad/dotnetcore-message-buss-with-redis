@@ -2,8 +2,8 @@
 use redis as message buss
 
 # RedisUsage.Test
-Push data to queue
+The console sample to push data to queue
 When push can decide the type process eg: stack, queue, topic
 
 # RedisUsage.ConsoleHandle
-Handle data and process
+The console sample of Handle data and process
