@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <StartupObject></StartupObject>  
+  </PropertyGroup>
+  <PropertyGroup>
+    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\RedisUsage.Commands\RedisUsage.Commands.csproj" />
+    <ProjectReference Include="..\RedisUsage.RedisServices\RedisUsage.RedisServices.csproj" />
+  </ItemGroup>
+</Project>
