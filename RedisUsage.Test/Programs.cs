@@ -16,8 +16,8 @@ namespace RedisUsage.Test
 
         public static void Main(params string[] args)
         {
-            //RedisServices.RedisServices.Init("192.168.15.188", null, "Du@211284");
-            RedisServices.RedisServices.Init("127.0.0.1", null, "Du@211284");
+            //RedisServices.RedisServices.Init("192.168.15.188", null, "");
+            RedisServices.RedisServices.Init("127.0.0.1", null, "");
             Console.WriteLine(RedisServices.RedisServices.Ping());
             HelpGuider();
             //MessageBussServices.Subscribe<SampleTest>("RedisUsage.Test", (data) => {
