@@ -16,10 +16,15 @@ namespace RedisUsage.Test
 
         public static void Main(params string[] args)
         {
-            RedisServices.RedisServices.Init("192.168.15.188", null, "Du@211284");
+            //RedisServices.RedisServices.Init("192.168.15.188", null, "Du@211284");
+            RedisServices.RedisServices.Init("127.0.0.1", null, "Du@211284");
             Console.WriteLine(RedisServices.RedisServices.Ping());
             HelpGuider();
-
+            //MessageBussServices.Subscribe<SampleTest>("RedisUsage.Test", (data) => {
+            //    Console.WriteLine("subscribe inline console");
+            //    Console.WriteLine("Recieved to process:");
+            //    Console.WriteLine(JsonConvert.SerializeObject(data));
+            //});
             while (!appStop)
             {
                 var cmd = (Console.ReadLine() ?? string.Empty).ToLower();
@@ -75,7 +80,7 @@ namespace RedisUsage.Test
                     CommandUsageTest(cmd);
                 }
             }
-
+           
             Console.ReadLine();
         }
 

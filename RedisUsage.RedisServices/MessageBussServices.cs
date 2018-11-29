@@ -335,7 +335,7 @@ namespace RedisUsage.RedisServices
             {
                 DataStructure = d.Value,
                 Name = d.Key,
-                Subscriber = GetSubscribers(d.Value),
+                Subscribers = GetSubscribers(d.Key),
                 PendingDataQueueLength = GetPendingDataQueueLength(d.Value),
                 SuccessDataQueueLength = GetSuccessDataQueueLength(d.Value),
                 ErrorDataQueueLength = GetErrorDataQueueLength(d.Value)
@@ -348,7 +348,7 @@ namespace RedisUsage.RedisServices
             {
                 DataStructure = channelVal,
                 Name = channelName,
-                Subscriber = GetSubscribers(channelName),
+                Subscribers = GetSubscribers(channelName),
                 PendingDataQueueLength = GetPendingDataQueueLength(channelName),
                 SuccessDataQueueLength = GetSuccessDataQueueLength(channelName),
                 ErrorDataQueueLength = GetErrorDataQueueLength(channelName)
@@ -385,7 +385,7 @@ namespace RedisUsage.RedisServices
             public string Name { get; set; }
             public string DataStructure { get; set; }
 
-            public List<SubscriberInfo> Subscriber { get; set; }
+            public List<SubscriberInfo> Subscribers { get; set; }
             public long PendingDataQueueLength { get; set; }
             public long SuccessDataQueueLength { get; set; }
             public long ErrorDataQueueLength { get; set; }
