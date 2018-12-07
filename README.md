@@ -13,16 +13,16 @@ The console sample of Handle data and process
 
 # Code usage
 
-//push data to topic with full type name of "SampleTest"
-MessageBussServices.Publish<SampleTest>(new SampleTest
-                    {
-                        Message = msg,
-                        CreatedDate = DateTime.Now
-});
+        //push data to topic with full type name of "SampleTest"
+        MessageBussServices.Publish<SampleTest>(new SampleTest
+                            {
+                                Message = msg,
+                                CreatedDate = DateTime.Now
+        });
   
-//received data from topic with full type name of "SampleTest" to process
-RedisServices.MessageBussServices.Subscribe<SampleTest>("console handle1", (obj) =>
-            {
-                Console.WriteLine("console handle1");
-                Console.WriteLine(JsonConvert.SerializeObject(obj));
-});
+        //received data from topic with full type name of "SampleTest" to process
+        RedisServices.MessageBussServices.Subscribe<SampleTest>("console handle1", (obj) =>
+                    {
+                        Console.WriteLine("console handle1");
+                        Console.WriteLine(JsonConvert.SerializeObject(obj));
+        });
