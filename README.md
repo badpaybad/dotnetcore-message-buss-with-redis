@@ -30,3 +30,15 @@ The console sample of Handle data and process
                         Console.WriteLine("console handle1");
                         Console.WriteLine(JsonConvert.SerializeObject(obj));
         });
+
+# Code structure
+
+## CommandsEvents
+### Comands should be publish as Queue, Stack. Commands should sequence to process. We can deploy many consumer to see the same queue or stack to dequeue or pop data to process. Process one by one, we have more consumer so item in queue or stack can be faster dequeue or pop to process. After commands processed, we should fire Events. Many consumer can process the same time and diference data (the same type of data).
+### Event should be publish an Topic. Many consumer can subscribe Topic to process the same time and the same data (the same type of data).
+
+    Command -> CommandHandler (consumer) -> processed -> fire Event -> notify to Subscribers -> EventHandlers (consumers) -> process Event data
+    
+### DDD and Eventsourcing 
+We can add DDD and Eventsourcing in CommandHandler. We can call to Aggregate Repository to build Domain business and call function.
+
