@@ -1,6 +1,10 @@
 # dotnetcore-message-buss-with-redis
 Use redis as message buss, main mechanism Pub Sub. We create channel (topic) by full type nam of object (Commands, Event). Everytime push (publish) data we save to queue by full type name of object. Then auto notify to subscriber to dequeue then process. So that no lose message if no subscriber. 
 
+    https://redis.io
+    https://github.com/StackExchange/StackExchange.Redis
+    https://github.com/MicrosoftArchive/redis
+
 ## The main idea
 We Publish(an instance of Class) and We Subscribe(type of Class) to process. The type full name of Class will auto become an topic. Support distributed for subscrbiers with data structure
 
