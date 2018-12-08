@@ -2,7 +2,7 @@
 
 namespace RedisUsage.Commands
 {
-    public class SampleTest
+    public class SampleTestCommand
     {
         public DateTime CreatedDate { get; set; }
         public Guid Id { get; set; } = Guid.NewGuid();

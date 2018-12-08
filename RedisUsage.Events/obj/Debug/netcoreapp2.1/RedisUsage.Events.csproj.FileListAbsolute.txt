@@ -1,0 +1,9 @@
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\bin\Debug\netcoreapp2.1\RedisUsage.Events.deps.json
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\bin\Debug\netcoreapp2.1\RedisUsage.Events.dll
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\bin\Debug\netcoreapp2.1\RedisUsage.Events.pdb
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.csprojAssemblyReference.cache
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.csproj.CoreCompileInputs.cache
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.AssemblyInfoInputs.cache
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.AssemblyInfo.cs
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.dll
+D:\work\dotnetcore-message-buss-with-redis\RedisUsage.Events\obj\Debug\netcoreapp2.1\RedisUsage.Events.pdb

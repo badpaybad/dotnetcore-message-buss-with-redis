@@ -93,7 +93,7 @@ namespace RedisUsage.Test
                     var msg1 = Console.ReadLine();
                     for (var i = 0; i < 5; i++)
                     {
-                        MessageBussServices.Publish<SampleTest>(new SampleTest
+                        MessageBussServices.Publish<SampleTestCommand>(new SampleTestCommand
                         {
                             Message = i + ". " + msg1,
                             CreatedDate = DateTime.Now
@@ -105,7 +105,7 @@ namespace RedisUsage.Test
                     var msg2 = Console.ReadLine();
                     for (var i = 0; i < 5; i++)
                     {
-                        MessageBussServices.Publish<SampleTest>(new SampleTest
+                        MessageBussServices.Publish<SampleTestCommand>(new SampleTestCommand
                         {
                             Message = i + ". " + msg2,
                             CreatedDate = DateTime.Now
@@ -116,7 +116,7 @@ namespace RedisUsage.Test
                 case "push":
                     Console.WriteLine("Enter message:");
                     var msg = Console.ReadLine();
-                    MessageBussServices.Publish<SampleTest>(new SampleTest
+                    MessageBussServices.Publish<SampleTestCommand>(new SampleTestCommand
                     {
                         Message = msg,
                         CreatedDate = DateTime.Now
@@ -133,7 +133,7 @@ namespace RedisUsage.Test
                     {
                         while (!madStop)
                         {
-                            MessageBussServices.Publish<SampleTest>(new SampleTest
+                            MessageBussServices.Publish<SampleTestCommand>(new SampleTestCommand
                             {
                                 Message = msg3,
                                 CreatedDate = DateTime.Now

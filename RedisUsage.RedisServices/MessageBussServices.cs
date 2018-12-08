@@ -15,7 +15,7 @@ namespace RedisUsage.RedisServices
             /// <summary>
             /// Allow many worker process same data at a time
             /// </summary>
-            PubSub,
+            Topic,
             /// <summary>
             /// Allow only one worker process data at a time
             /// </summary>
@@ -95,13 +95,13 @@ namespace RedisUsage.RedisServices
         {
             var processTypeOfChannel = RedisServices.HashGet(_keyListChannelName, type);
 
-            if (string.IsNullOrEmpty(processTypeOfChannel)) processTypeOfChannel = ProcessType.PubSub.ToString();
+            if (string.IsNullOrEmpty(processTypeOfChannel)) processTypeOfChannel = ProcessType.Topic.ToString();
             return processTypeOfChannel;
         }
 
         #endregion
 
-        public static void Publish<T>(T data, ProcessType processType = ProcessType.PubSub)
+        public static void Publish<T>(T data, ProcessType processType = ProcessType.Topic)
         {
             var type = typeof(T).FullName;
 
@@ -117,13 +117,13 @@ namespace RedisUsage.RedisServices
             string channelSubscriber = GetKeySubscribersForChannel(type);
             RedisServices.HashSet(channelSubscriber, new KeyValuePair<string, string>(subscriberName, subscriberName));
 
-            string channelPubSubChild = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.PubSub.ToString());
+            string channelPubSubChild = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.Topic.ToString());
             //regist to process data for data structure pubsub
             RedisServices.Subscribe(channelPubSubChild, (data) =>
             {
                 TryDoJob<T>(data, handle);
             });
-            string channelPubSubParent = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, ProcessType.PubSub.ToString());
+            string channelPubSubParent = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, ProcessType.Topic.ToString());
             //regist to process if pubsub try dequeue get data and publish to subscriber
             RedisServices.Subscribe(channelPubSubParent, (msg) =>
             {
@@ -135,7 +135,7 @@ namespace RedisUsage.RedisServices
 
                     foreach (var subc in subscribers)
                     {
-                        string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(subc.Key, type, ProcessType.PubSub.ToString());
+                        string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(subc.Key, type, ProcessType.Topic.ToString());
                         //channelPubSubChild
                         RedisServices.Publish(queueDataNameChannelSubscriber, data);
                     }
@@ -263,7 +263,7 @@ namespace RedisUsage.RedisServices
                         if (RedisServices.QueueHasValue(queueDataName))
                         {
                             ProcessType processType = GetProcessTypeByName(processTypeOfChannel);
-                            if (processType == ProcessType.PubSub)
+                            if (processType == ProcessType.Topic)
                             {
                                 string queueDataNameChannelSubscriber = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, processTypeOfChannel);
                                 //notify to parent, then parent will find subscribers to process same data
@@ -305,7 +305,7 @@ namespace RedisUsage.RedisServices
             }
             else
             {
-                return ProcessType.PubSub;
+                return ProcessType.Topic;
             }
         }
         #endregion
