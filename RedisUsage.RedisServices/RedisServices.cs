@@ -172,6 +172,11 @@ namespace RedisUsage.RedisServices
             RedisDatabase.HashSet(key, val.Key, val.Value);
         }
 
+        public static bool HashExisted(string key, string field)
+        {
+            return RedisDatabase.HashExists(key, field);
+        }
+
         public static string HashGet(string key, string fieldName)
         {
             if (!IsEnable)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading;
 
 namespace RedisUsage.RedisServices
@@ -115,6 +116,12 @@ namespace RedisUsage.RedisServices
         {
             var type = typeof(T).FullName;
             string channelSubscriber = GetKeySubscribersForChannel(type);
+
+           if(RedisServices.HashExisted(channelSubscriber, subscriberName))
+            {
+                throw new MessageBussServices.ExistedSubscriber($"Existed subscriber {subscriberName} in channel {channelSubscriber}");
+            }
+
             RedisServices.HashSet(channelSubscriber, new KeyValuePair<string, string>(subscriberName, subscriberName));
 
             string channelPubSubChild = GetKeyToRealPublishFromChannelToSubscriber(subscriberName, type, ProcessType.Topic.ToString());
@@ -394,6 +401,26 @@ namespace RedisUsage.RedisServices
         public class SubscriberInfo
         {
             public string Name { get; set; }
+        }
+
+        [Serializable]
+        private class ExistedSubscriber : Exception
+        {
+            public ExistedSubscriber()
+            {
+            }
+
+            public ExistedSubscriber(string message) : base(message)
+            {
+            }
+
+            public ExistedSubscriber(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+
+            protected ExistedSubscriber(SerializationInfo info, StreamingContext context) : base(info, context)
+            {
+            }
         }
 
         #endregion
