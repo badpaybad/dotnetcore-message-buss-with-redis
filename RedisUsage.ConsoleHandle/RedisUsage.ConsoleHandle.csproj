@@ -10,8 +10,6 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\RedisUsage.Commands\RedisUsage.Commands.csproj" />
-    <ProjectReference Include="..\RedisUsage.Events\RedisUsage.Events.csproj" />
     <ProjectReference Include="..\RedisUsage.RedisServices\RedisUsage.RedisServices.csproj" />
   </ItemGroup>
 </Project>
