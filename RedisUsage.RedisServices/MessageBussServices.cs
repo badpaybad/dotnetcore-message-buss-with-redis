@@ -116,13 +116,15 @@ namespace RedisUsage.RedisServices
             string queueDataName = GetKeyQueueDataForChannel(type);
             RedisServices.TryEnqueue(queueDataName, JsonConvert.SerializeObject(data));
         }
-        
-        public static void Subscribe<T>(string subscriberName, Action<T> handle)
+
+        public static void Subscribe(string subscriberName, string typeFullName, Action<object> handle)
         {
-            var type = typeof(T).FullName;
+
+            var type = typeFullName;
+
             string channelSubscriber = GetKeySubscribersForChannel(type);
 
-           if(RedisServices.HashExisted(channelSubscriber, subscriberName))
+            if (RedisServices.HashExisted(channelSubscriber, subscriberName))
             {
                 throw new MessageBussServices.ExistedSubscriber($"Existed subscriber {subscriberName} in channel {channelSubscriber}");
             }
@@ -133,7 +135,7 @@ namespace RedisUsage.RedisServices
             //regist to process data for data structure pubsub
             RedisServices.Subscribe(channelPubSubChild, (data) =>
             {
-                TryDoJob<T>(data, handle);
+                TryDoJob(typeFullName, data, handle);
             });
             string channelPubSubParent = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, ProcessType.Topic.ToString());
             //regist to process if pubsub try dequeue get data and publish to subscriber
@@ -162,7 +164,7 @@ namespace RedisUsage.RedisServices
                 string queueDataName = GetKeyQueueDataForChannel(type);
                 while (RedisServices.TryDequeue(queueDataName, out data))
                 {
-                    TryDoJob<T>(data, handle);
+                    TryDoJob(type, data, handle);
                 }
             });
 
@@ -174,19 +176,34 @@ namespace RedisUsage.RedisServices
                 string queueDataName = GetKeyQueueDataForChannel(type);
                 while (RedisServices.TryPop(queueDataName, out data))
                 {
-                    TryDoJob<T>(data, handle);
+                    TryDoJob(type, data, handle);
                 }
             });
         }
 
-        static void TryDoJob<T>(string data, Action<T> handle)
+        public static void Subscribe<T>(string subscriberName, Action<T> handle)
         {
             var type = typeof(T).FullName;
+
+            Subscribe(type, subscriberName, (o) =>
+            {
+                handle((T)o);
+            });
+        }
+
+        static void TryDoJob(string typeFullName, string data, Action<object> handle)
+        {
+            var type = typeFullName;
             var queueName = GetKeyQueueDataForChannel(type);
             try
             {
-                var obj = JsonConvert.DeserializeObject<T>(data);
-                handle(obj);
+                var jobj = JsonConvert.DeserializeObject(data) as Newtonsoft.Json.Linq.JObject;
+                var objectType = Type.GetType(type, false, true);
+
+                var o = jobj.ToObject(objectType);
+
+                handle(o);
+
                 string successQueueDataName = queueName + "_Success";
                 RedisServices.TryEnqueue(successQueueDataName, data);
                 Thread.Sleep(1);

@@ -21,3 +21,8 @@
 /RedisUsage.Events/bin
 /RedisUsage.Events/obj
 /RedisUsage.Events/bin
+/ProjectSample.CommandsAndEvents/obj
+/ProjectSample.Database/bin/Debug/netcoreapp2.1
+/ProjectSample.Database/obj
+/ProjectSample.SampleCommandHandlers/obj
+/ProjectSample.SampleEventHandlers/obj

@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.RedisServices", "RedisUsage.RedisServices\RedisUsage.RedisServices.csproj", "{4A4B51CF-FC31-4C04-9B11-312E0A26ABF9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_CommandsEvents", "_CommandsEvents", "{808FF862-CDE7-4BA9-A5FA-A3C7BAD355F1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjCommandsEvents", "PrjCommandsEvents", "{808FF862-CDE7-4BA9-A5FA-A3C7BAD355F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageBuss", "MessageBuss", "{4C535D86-6ED3-4536-AB04-D325EA85D249}"
 EndProject
@@ -13,15 +13,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{0D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cqrs", "Cqrs", "{4BA48892-D62C-476A-8098-DAB09EE4192F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisUsage.CqrsCore", "RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj", "{1A88DFBB-4718-4A55-8F73-8DF01348E22E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.CqrsCore", "RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj", "{1A88DFBB-4718-4A55-8F73-8DF01348E22E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_ProjectDb", "_ProjectDb", "{BD46664D-029E-4423-8CEB-E8324B37579C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjDb", "PrjDb", "{BD46664D-029E-4423-8CEB-E8324B37579C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_DomainBusiness", "_DomainBusiness", "{7AEF947A-77B3-482E-ABC9-EF78829EA6F3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjDomainBusiness", "PrjDomainBusiness", "{7AEF947A-77B3-482E-ABC9-EF78829EA6F3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_ClientUi", "_ClientUi", "{16708B8C-B102-4ADD-B15C-3738A81FFB33}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjClientUi", "PrjClientUi", "{16708B8C-B102-4ADD-B15C-3738A81FFB33}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_ProjectApis", "_ProjectApis", "{D72AF019-AB32-4144-8B64-8827EFAC8755}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjApis", "PrjApis", "{D72AF019-AB32-4144-8B64-8827EFAC8755}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.Database", "ProjectSample.Database\ProjectSample.Database.csproj", "{86944D20-D7F9-4594-9381-26ACEC1C1285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.CommandsAndEvents", "ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj", "{8431967D-DBAA-4123-85B3-3AD1082E547F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.SampleCommandHandlers", "ProjectSample.SampleCommandHandlers\ProjectSample.SampleCommandHandlers.csproj", "{5B83A432-EC55-4FED-991C-1E33E63EED8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.SampleEventHandlers", "ProjectSample.SampleEventHandlers\ProjectSample.SampleEventHandlers.csproj", "{F832609A-F0F0-4688-B977-CBA143FEEA67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +45,22 @@ Global
 		{1A88DFBB-4718-4A55-8F73-8DF01348E22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A88DFBB-4718-4A55-8F73-8DF01348E22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A88DFBB-4718-4A55-8F73-8DF01348E22E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86944D20-D7F9-4594-9381-26ACEC1C1285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86944D20-D7F9-4594-9381-26ACEC1C1285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86944D20-D7F9-4594-9381-26ACEC1C1285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86944D20-D7F9-4594-9381-26ACEC1C1285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8431967D-DBAA-4123-85B3-3AD1082E547F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8431967D-DBAA-4123-85B3-3AD1082E547F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8431967D-DBAA-4123-85B3-3AD1082E547F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8431967D-DBAA-4123-85B3-3AD1082E547F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B83A432-EC55-4FED-991C-1E33E63EED8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B83A432-EC55-4FED-991C-1E33E63EED8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B83A432-EC55-4FED-991C-1E33E63EED8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B83A432-EC55-4FED-991C-1E33E63EED8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +68,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4A4B51CF-FC31-4C04-9B11-312E0A26ABF9} = {4C535D86-6ED3-4536-AB04-D325EA85D249}
 		{1A88DFBB-4718-4A55-8F73-8DF01348E22E} = {4BA48892-D62C-476A-8098-DAB09EE4192F}
+		{86944D20-D7F9-4594-9381-26ACEC1C1285} = {BD46664D-029E-4423-8CEB-E8324B37579C}
+		{8431967D-DBAA-4123-85B3-3AD1082E547F} = {808FF862-CDE7-4BA9-A5FA-A3C7BAD355F1}
+		{5B83A432-EC55-4FED-991C-1E33E63EED8A} = {7AEF947A-77B3-482E-ABC9-EF78829EA6F3}
+		{F832609A-F0F0-4688-B977-CBA143FEEA67} = {7AEF947A-77B3-482E-ABC9-EF78829EA6F3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBCE5463-55CD-4EBB-90E8-F4AEC75FFD7E}

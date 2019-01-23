@@ -4,7 +4,13 @@ namespace RedisUsage.CqrsCore
 {
     public interface IEvent
     {
-        Guid? PublishedEventId { get; set; }
-        long Version { get; set; }
+        /// <summary>
+        /// be long to eventsource
+        /// </summary>
+        Guid? PublishedEventId { get;  }
+        /// <summary>
+        /// be long to eventsource
+        /// </summary>
+        long Version { get; }
     }
 }

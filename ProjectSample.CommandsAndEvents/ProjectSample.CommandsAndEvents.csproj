@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectSample.Database\ProjectSample.Database.csproj" />
+    <ProjectReference Include="..\RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj" />
+  </ItemGroup>
+
+</Project>
