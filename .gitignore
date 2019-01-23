@@ -11,3 +11,13 @@
 /RedisUsage.RedisServices/obj
 /RedisUsage.Test/bin/Debug/netcoreapp2.1
 /RedisUsage.Test/obj
+/RedisUsage.CqrsCore/bin/Debug/netcoreapp2.1
+/RedisUsage.CqrsCore/obj
+/RedisUsage.EfMigration/bin/Debug/netcoreapp2.1
+/RedisUsage.EfMigration/obj
+/RedisUsage.Events/bin/Debug/netcoreapp2.1
+/SampleProject.Database/obj/Debug/netcoreapp2.1
+/RedisUsage.Events/obj
+/RedisUsage.Events/bin
+/RedisUsage.Events/obj
+/RedisUsage.Events/bin

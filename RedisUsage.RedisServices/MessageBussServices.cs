@@ -41,12 +41,7 @@ namespace RedisUsage.RedisServices
                 {
                     try
                     {
-                        var allChannel = RedisServices.HashGetAll(_keyListChannelName);
-
-                        foreach (var channel in allChannel)
-                        {
-                            RegisterNotifyWorkerAndStart(channel.Key);
-                        }
+                        ScanToRegisterWorker();
                     }
                     catch (Exception ex)
                     {
@@ -58,6 +53,16 @@ namespace RedisUsage.RedisServices
                     }
                 }
             }).Start();
+        }
+
+        public static void ScanToRegisterWorker()
+        {
+            var allChannel = RedisServices.HashGetAll(_keyListChannelName);
+
+            foreach (var channel in allChannel)
+            {
+                RegisterNotifyWorkerAndStart(channel.Key);
+            }
         }
 
         #region build key redis
@@ -111,7 +116,7 @@ namespace RedisUsage.RedisServices
             string queueDataName = GetKeyQueueDataForChannel(type);
             RedisServices.TryEnqueue(queueDataName, JsonConvert.SerializeObject(data));
         }
-
+        
         public static void Subscribe<T>(string subscriberName, Action<T> handle)
         {
             var type = typeof(T).FullName;
