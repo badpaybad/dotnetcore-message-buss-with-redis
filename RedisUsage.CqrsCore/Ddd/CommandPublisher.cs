@@ -18,7 +18,7 @@ namespace RedisUsage.CqrsCore.Ddd
 
         }
 
-        public ICommandPublisher Instance { get { return _instance; } }
+        public static ICommandPublisher Instance { get { return _instance; } }
 
 
         public void Send(ICommand cmd, bool isDataInStack = false)

@@ -25,11 +25,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjApis", "PrjApis", "{D72A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.Database", "ProjectSample.Database\ProjectSample.Database.csproj", "{86944D20-D7F9-4594-9381-26ACEC1C1285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.CommandsAndEvents", "ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj", "{8431967D-DBAA-4123-85B3-3AD1082E547F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.CommandsAndEvents", "ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj", "{8431967D-DBAA-4123-85B3-3AD1082E547F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.SampleCommandHandlers", "ProjectSample.SampleCommandHandlers\ProjectSample.SampleCommandHandlers.csproj", "{5B83A432-EC55-4FED-991C-1E33E63EED8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.SampleCommandHandlers", "ProjectSample.SampleCommandHandlers\ProjectSample.SampleCommandHandlers.csproj", "{5B83A432-EC55-4FED-991C-1E33E63EED8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.SampleEventHandlers", "ProjectSample.SampleEventHandlers\ProjectSample.SampleEventHandlers.csproj", "{F832609A-F0F0-4688-B977-CBA143FEEA67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.SampleEventHandlers", "ProjectSample.SampleEventHandlers\ProjectSample.SampleEventHandlers.csproj", "{F832609A-F0F0-4688-B977-CBA143FEEA67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.ProjectSampleBootingEngine", "ProjectSample.ProjectSampleBootingEngine\ProjectSample.ProjectSampleBootingEngine.csproj", "{30CCC73A-B193-44CE-9BCA-56805AE3A225}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.Apis", "ProjectSample.Apis\ProjectSample.Apis.csproj", "{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,14 @@ Global
 		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F832609A-F0F0-4688-B977-CBA143FEEA67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30CCC73A-B193-44CE-9BCA-56805AE3A225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30CCC73A-B193-44CE-9BCA-56805AE3A225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30CCC73A-B193-44CE-9BCA-56805AE3A225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30CCC73A-B193-44CE-9BCA-56805AE3A225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +84,8 @@ Global
 		{8431967D-DBAA-4123-85B3-3AD1082E547F} = {808FF862-CDE7-4BA9-A5FA-A3C7BAD355F1}
 		{5B83A432-EC55-4FED-991C-1E33E63EED8A} = {7AEF947A-77B3-482E-ABC9-EF78829EA6F3}
 		{F832609A-F0F0-4688-B977-CBA143FEEA67} = {7AEF947A-77B3-482E-ABC9-EF78829EA6F3}
+		{30CCC73A-B193-44CE-9BCA-56805AE3A225} = {16708B8C-B102-4ADD-B15C-3738A81FFB33}
+		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D} = {D72AF019-AB32-4144-8B64-8827EFAC8755}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBCE5463-55CD-4EBB-90E8-F4AEC75FFD7E}

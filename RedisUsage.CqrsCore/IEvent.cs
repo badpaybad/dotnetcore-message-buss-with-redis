@@ -7,10 +7,10 @@ namespace RedisUsage.CqrsCore
         /// <summary>
         /// be long to eventsource
         /// </summary>
-        Guid? PublishedEventId { get;  }
+        Guid? PublishedEventId { get; set; }
         /// <summary>
         /// be long to eventsource
         /// </summary>
-        long Version { get; }
+        long Version { get; set; }
     }
 }

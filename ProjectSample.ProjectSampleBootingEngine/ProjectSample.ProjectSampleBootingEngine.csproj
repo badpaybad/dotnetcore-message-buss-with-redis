@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj" />
+    <ProjectReference Include="..\ProjectSample.Database\ProjectSample.Database.csproj" />
+    <ProjectReference Include="..\ProjectSample.SampleCommandHandlers\ProjectSample.SampleCommandHandlers.csproj" />
+    <ProjectReference Include="..\ProjectSample.SampleEventHandlers\ProjectSample.SampleEventHandlers.csproj" />
+    <ProjectReference Include="..\RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj" />
+    <ProjectReference Include="..\RedisUsage.RedisServices\RedisUsage.RedisServices.csproj" />
+  </ItemGroup>
+
+</Project>

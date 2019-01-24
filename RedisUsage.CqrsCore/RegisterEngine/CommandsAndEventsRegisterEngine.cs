@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using RedisUsage.CqrsCore.Ef;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Text;
 
 namespace RedisUsage.CqrsCore.RegisterEngine
 {
@@ -26,7 +27,16 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             //}
         }
 
-        public static bool AutoRegister()
+
+        public static void Init(string appSettingsFileName = "appsettings.json")
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(appSettingsFileName, true, true).Build();
+
+            ConfigurationManagerExtensions.SetConfiguration(config);
+        }
+
+        public static bool AutoRegisterForHandlers()
         {
             List<Assembly> allAss = FindAllDll();
 
@@ -34,7 +44,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             {
                 try
                 {
-                    RegisterAssembly(assembly);
+                    RegisterAssemblyForHandlers(assembly);
                 }
                 catch (Exception)
                 {
@@ -83,7 +93,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             return filter.Values.ToList();
         }
 
-        public static void RegisterAssembly(Assembly executingAssembly)
+        public static void RegisterAssemblyForHandlers(Assembly executingAssembly)
         {
             var allTypes = executingAssembly.GetTypes();
 

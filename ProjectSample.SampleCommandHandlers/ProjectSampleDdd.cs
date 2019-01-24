@@ -22,7 +22,7 @@ namespace ProjectSample.SampleCommandHandlers
         public ProjectSampleDdd(Guid sampleId, string sampleVersion, string sampleJsonData)
         {
 
-            ApplyChange(new SampleCreated(Guid.NewGuid(), sampleId, sampleVersion, sampleJsonData));
+            ApplyChange(new SampleCreated(sampleId, sampleVersion, sampleJsonData));
         }
 
         public void Create(string title) { }
@@ -31,7 +31,7 @@ namespace ProjectSample.SampleCommandHandlers
         {
             var sampleId = Id;
 
-            ApplyChange(new SampleVersionChanged(Guid.NewGuid(), sampleId, sampleVersion));
+            ApplyChange(new SampleVersionChanged(sampleId, sampleVersion));
         }
     }
 }

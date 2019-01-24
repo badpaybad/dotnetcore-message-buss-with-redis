@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj" />
+    <ProjectReference Include="..\ProjectSample.SampleCommandHandlers\ProjectSample.SampleCommandHandlers.csproj" />
+    <ProjectReference Include="..\ProjectSample.SampleEventHandlers\ProjectSample.SampleEventHandlers.csproj" />
+    <ProjectReference Include="..\RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -26,3 +26,12 @@
 /ProjectSample.Database/obj
 /ProjectSample.SampleCommandHandlers/obj
 /ProjectSample.SampleEventHandlers/obj
+/.vs/config
+/ProjectSample.Apis/bin/Debug/netcoreapp2.1
+/ProjectSample.Apis/obj
+/ProjectSample.CommandsAndEvents/bin/Debug/netcoreapp2.1
+/ProjectSample.MessageBussTest/obj
+/ProjectSample.ProjectSampleBootingEngine/bin/Debug/netcoreapp2.1
+/ProjectSample.ProjectSampleBootingEngine/obj
+/ProjectSample.SampleCommandHandlers/bin/Debug/netcoreapp2.1
+/ProjectSample.SampleEventHandlers/bin/Debug/netcoreapp2.1

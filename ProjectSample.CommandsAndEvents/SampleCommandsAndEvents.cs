@@ -13,17 +13,16 @@ namespace ProjectSample.CommandsAndEvents
         public string SampleVersion { get; set; }
         public string SampleJsonData { get; set; }
 
-        public CreateSample(Guid? publishedCommandId, string tokenSession, Guid sampleId, string sampleVersion, string sampleJsonData)
+        public CreateSample( Guid sampleId, string sampleVersion, string sampleJsonData)
         {
-            PublishedCommandId = publishedCommandId;
-            TokenSession = tokenSession;
             SampleId = sampleId;
             SampleVersion = sampleVersion;
             SampleJsonData = sampleJsonData;
         }
     }
 
-    public class ChangeVersionOfSample : ICommand {
+    public class ChangeVersionOfSample : ICommand
+    {
         public Guid? PublishedCommandId { get; set; }
         public string TokenSession { get; set; }
 
@@ -40,33 +39,32 @@ namespace ProjectSample.CommandsAndEvents
 
     public class SampleCreated : IEvent
     {
-        public Guid? PublishedEventId { get; }
-        public long Version { get; }
+        public Guid? PublishedEventId { get; set; }
+        public long Version { get; set; }
 
         public Guid SampleId { get; set; }
 
         public string SampleVersion { get; set; }
         public string SampleJsonData { get; set; }
 
-        public SampleCreated(Guid? publishedEventId, Guid sampleId, string sampleVersion, string sampleJsonData)
+        public SampleCreated(Guid sampleId, string sampleVersion, string sampleJsonData)
         {
-            PublishedEventId = publishedEventId;
             SampleId = sampleId;
             SampleVersion = sampleVersion;
             SampleJsonData = sampleJsonData;
         }
     }
 
-    public class SampleVersionChanged : IEvent {
-        public Guid? PublishedEventId { get; }
-        public long Version { get; }
+    public class SampleVersionChanged : IEvent
+    {
+        public Guid? PublishedEventId { get; set; }
+        public long Version { get; set; }
 
         public Guid SampleId { get; set; }
         public string SampleVersion { get; set; }
 
-        public SampleVersionChanged(Guid? publishedEventId, Guid sampleId, string sampleVersion)
+        public SampleVersionChanged(Guid sampleId, string sampleVersion)
         {
-            PublishedEventId = publishedEventId;
             SampleId = sampleId;
             SampleVersion = sampleVersion;
         }
