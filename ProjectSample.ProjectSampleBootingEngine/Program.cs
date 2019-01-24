@@ -11,20 +11,23 @@ namespace ProjectSample.ProjectSampleBootingEngine
     {
         static void Main(string[] args)
         {
-
-            CommandsAndEventsRegisterEngine.Init();
-
-
-            RedisServices.Init("127.0.0.1", null, string.Empty);
-
+            CommandsAndEventsRegisterEngine.Init();            
+         
             CommandsAndEventsRegisterEngine.AutoRegisterForHandlers();
 
+            Console.WriteLine("Try to create sample data");
             Guid sampleId = Guid.NewGuid();
-
+                        
             CommandPublisher.Instance.Send(new CreateSample(sampleId, "Version.1.0", "{}"));
 
             CommandPublisher.Instance.Send(new ChangeVersionOfSample(sampleId, "Version.2.0"));
 
+            while (true)
+            {
+                var cmd = Console.ReadLine();
+
+                if (cmd == "quit") return;
+            }
         }
     }
 }

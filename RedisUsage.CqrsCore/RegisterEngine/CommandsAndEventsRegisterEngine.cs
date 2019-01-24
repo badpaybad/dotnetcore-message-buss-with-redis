@@ -27,13 +27,23 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             //}
         }
 
-
         public static void Init(string appSettingsFileName = "appsettings.json")
         {
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile(appSettingsFileName, true, true).Build();
 
             ConfigurationManagerExtensions.SetConfiguration(config);
+
+            var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
+            var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
+            var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
+            int? redisPortInt = null;
+            if (!string.IsNullOrEmpty(redisPort))
+            {
+                redisPortInt = int.Parse(redisPort);
+            }
+
+            RedisUsage.RedisServices.RedisServices.Init(redisHost, redisPortInt, redisPwd);
         }
 
         public static bool AutoRegisterForHandlers()

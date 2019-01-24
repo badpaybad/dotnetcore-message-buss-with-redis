@@ -17,6 +17,14 @@ namespace RedisUsage.CqrsCore.Ef
 
         public static string GetConnectionString(string name)
         {
+            TryReadConfigFile();
+
+            var connectionString = Configuration[$"ConnectionStrings:{name}"];
+            return connectionString;
+        }
+
+        private static void TryReadConfigFile()
+        {
             if (Configuration == null)
             {
                 var consoleFileApp = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appSettings.json");
@@ -30,9 +38,14 @@ namespace RedisUsage.CqrsCore.Ef
 
                 Configuration = builder.Build();
             }
+        }
 
-            var connectionString= Configuration[$"ConnectionStrings:{name}"];
-            return connectionString;
+        public static string GetValueByKey(string key)
+        {
+            TryReadConfigFile();
+
+            var val = Configuration[key];
+            return val;
         }
     }
 }
