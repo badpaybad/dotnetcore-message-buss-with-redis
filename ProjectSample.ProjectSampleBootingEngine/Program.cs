@@ -17,16 +17,27 @@ namespace ProjectSample.ProjectSampleBootingEngine
 
             Console.WriteLine("Try to create sample data");
             Guid sampleId = Guid.NewGuid();
-                        
-            CommandPublisher.Instance.Send(new CreateSample(sampleId, "Version.1.0", "{}"));
-
-            CommandPublisher.Instance.Send(new ChangeVersionOfSample(sampleId, "Version.2.0"));
+            Random rnd = new Random();
 
             while (true)
             {
+                Console.WriteLine("Type 'create' to create new");
+                Console.WriteLine("Type 'update' to update with latest create Id with random version");
                 var cmd = Console.ReadLine();
 
                 if (cmd == "quit") return;
+
+                if (cmd == "create")
+                {
+                    sampleId = Guid.NewGuid();
+                    CommandPublisher.Instance.Send(new CreateSample(sampleId, "Version.1.0", "{}"));
+                }
+                
+                if (cmd == "update")
+                {
+                    var v = rnd.Next(1,100);
+                    CommandPublisher.Instance.Send(new ChangeVersionOfSample(sampleId, $"Version.{v}.0"));
+                }
             }
         }
     }

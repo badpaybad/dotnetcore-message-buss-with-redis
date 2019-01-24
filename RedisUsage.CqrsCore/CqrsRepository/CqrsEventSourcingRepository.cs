@@ -27,13 +27,12 @@ namespace RedisUsage.CqrsCore.CqrsRepository
         public TAggregate Get<TAggregate>(Guid aggregateId) where TAggregate : IAggregateRoot
         {
             List<EventSourcingDescription> eventsHistory;
-            var xaggregateId = aggregateId.ToString();
             var typeAggregate = typeof(TAggregate);
 
             using (var db = new EventSourcingDbContext())
             {
                 eventsHistory = db.EventSoucings.AsNoTracking()
-                    .Where(i => i.AggregateId.Equals(xaggregateId)
+                    .Where(i => i.AggregateId.Equals(aggregateId)
                                 && i.AggregateType.Equals(typeAggregate.AssemblyQualifiedName, StringComparison.OrdinalIgnoreCase)
                     ).OrderBy(i => i.Version).ThenBy(i => i.CreatedDate).ToList();
             }

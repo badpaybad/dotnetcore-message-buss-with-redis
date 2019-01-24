@@ -10,8 +10,6 @@ namespace ProjectSample.SampleCommandHandlers
     {
         public ICqrsEventSourcingRepository Repository => new CqrsEventSourcingRepository(new EventPublisher());
 
-        ICqrsEventSourcingRepository ICommandHandle<ChangeVersionOfSample>.Repository => throw new NotImplementedException();
-
         public void Handle(CreateSample c)
         {
             //valid command here
@@ -21,11 +19,14 @@ namespace ProjectSample.SampleCommandHandlers
             }
             //can ensure permission by token c.TokenSession            
 
+
             //do business
             Repository.CreateNew<ProjectSampleDdd>(new ProjectSampleDdd(c.SampleId, c.SampleVersion, c.SampleJsonData));
+
+            Console.WriteLine($"Done for CreateSample.Id{c.SampleId}");
         }
 
-        void ICommandHandle<ChangeVersionOfSample>.Handle(ChangeVersionOfSample c)
+        public void Handle(ChangeVersionOfSample c)
         {
             //valid command here
             if (string.IsNullOrEmpty(c.SampleVersion) || c.SampleId == Guid.Empty)
@@ -36,6 +37,8 @@ namespace ProjectSample.SampleCommandHandlers
 
             //do business
             Repository.GetDoSave<ProjectSampleDdd>(c.SampleId, a => a.ChangeVersion(c.SampleVersion));
+
+            Console.WriteLine($"Done for ChangeVersionOfSample.Id{c.SampleId}");
         }
     }
 }
