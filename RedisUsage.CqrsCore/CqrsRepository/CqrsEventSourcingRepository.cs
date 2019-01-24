@@ -83,6 +83,7 @@ namespace RedisUsage.CqrsCore.CqrsRepository
 
             var aggregateChangeds = aggregate.Changes.ToList();
             var xaggregateId = aggregate.Id;
+
             #region check lastest version
 
             long lastVersion = 0;
@@ -115,6 +116,12 @@ namespace RedisUsage.CqrsCore.CqrsRepository
             {
                 lastVersion++;
                 e.Version = lastVersion;
+
+                if (e.PublishedEventId == null)
+                {
+                    e.PublishedEventId = Guid.NewGuid();
+                }
+
                 //build event data add to event store db
                 eventChanges.Add(new EventSourcingDescription()
                 {

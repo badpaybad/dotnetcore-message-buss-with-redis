@@ -109,7 +109,7 @@ namespace RedisUsage.RedisServices
 
         public static void Publish<T>(T data, ProcessType processType = ProcessType.Topic)
         {
-            var type = typeof(T).FullName;
+            var type = data.GetType().AssemblyQualifiedName;
 
             RedisServices.HashSet(_keyListChannelName, new KeyValuePair<string, string>(type, processType.ToString()));
 
@@ -117,16 +117,17 @@ namespace RedisUsage.RedisServices
             RedisServices.TryEnqueue(queueDataName, JsonConvert.SerializeObject(data));
         }
 
-        public static void Subscribe(string subscriberName, string typeFullName, Action<object> handle)
+        public static void Subscribe(string subscriberName, string typeFullAssemblyQualifiedName, Action<object> handle)
         {
 
-            var type = typeFullName;
+            var type = typeFullAssemblyQualifiedName;
 
             string channelSubscriber = GetKeySubscribersForChannel(type);
 
             if (RedisServices.HashExisted(channelSubscriber, subscriberName))
             {
-                throw new MessageBussServices.ExistedSubscriber($"Existed subscriber {subscriberName} in channel {channelSubscriber}");
+                //todo: should unsubscribe before subscribe
+                //throw new MessageBussServices.ExistedSubscriber($"Existed subscriber {subscriberName} in channel {channelSubscriber}");
             }
 
             RedisServices.HashSet(channelSubscriber, new KeyValuePair<string, string>(subscriberName, subscriberName));
@@ -135,8 +136,9 @@ namespace RedisUsage.RedisServices
             //regist to process data for data structure pubsub
             RedisServices.Subscribe(channelPubSubChild, (data) =>
             {
-                TryDoJob(typeFullName, data, handle);
+                TryDoJob(typeFullAssemblyQualifiedName, data, handle);
             });
+
             string channelPubSubParent = GetKeyToRealPublishFromChannelToSubscriber(string.Empty, type, ProcessType.Topic.ToString());
             //regist to process if pubsub try dequeue get data and publish to subscriber
             RedisServices.Subscribe(channelPubSubParent, (msg) =>
@@ -183,7 +185,7 @@ namespace RedisUsage.RedisServices
 
         public static void Subscribe<T>(string subscriberName, Action<T> handle)
         {
-            var type = typeof(T).FullName;
+            var type = typeof(T).AssemblyQualifiedName;
 
             Subscribe(type, subscriberName, (o) =>
             {
@@ -191,9 +193,9 @@ namespace RedisUsage.RedisServices
             });
         }
 
-        static void TryDoJob(string typeFullName, string data, Action<object> handle)
+        static void TryDoJob(string typeFullAssemblyQualifiedName, string data, Action<object> handle)
         {
-            var type = typeFullName;
+            var type = typeFullAssemblyQualifiedName;
             var queueName = GetKeyQueueDataForChannel(type);
             try
             {
@@ -208,7 +210,7 @@ namespace RedisUsage.RedisServices
                 RedisServices.TryEnqueue(successQueueDataName, data);
                 Thread.Sleep(1);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 string errorQueueDataName = queueName + "_Error";
                 RedisServices.TryEnqueue(errorQueueDataName, data);

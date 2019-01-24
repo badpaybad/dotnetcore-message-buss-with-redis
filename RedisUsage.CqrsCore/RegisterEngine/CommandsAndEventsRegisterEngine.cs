@@ -142,11 +142,11 @@ namespace RedisUsage.CqrsCore.RegisterEngine
 
                     if (typeof(IEvent).IsAssignableFrom(pParameterType))
                     {
-                        var t = pParameterType.FullName;
+                        var typeFullAssemblyQualifiedName = pParameterType.AssemblyQualifiedName;
 
                         var className = mi.DeclaringType.FullName;
 
-                        RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{t}", t, (o) =>
+                        RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{typeFullAssemblyQualifiedName}", typeFullAssemblyQualifiedName, (o) =>
                         {
                             mi.Invoke(cqrsHandler, new object[] { o });
                         });
@@ -156,11 +156,11 @@ namespace RedisUsage.CqrsCore.RegisterEngine
 
                     if (typeof(ICommand).IsAssignableFrom(pParameterType))
                     {
-                        var t = pParameterType.FullName;
+                        var typeFullAssemblyQualifiedName = pParameterType.AssemblyQualifiedName;
 
                         var className = mi.DeclaringType.FullName;
 
-                        RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{t}", t, (o) =>
+                        RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{typeFullAssemblyQualifiedName}", typeFullAssemblyQualifiedName, (o) =>
                         {
                             mi.Invoke(cqrsHandler, new object[] { o });
                         });
