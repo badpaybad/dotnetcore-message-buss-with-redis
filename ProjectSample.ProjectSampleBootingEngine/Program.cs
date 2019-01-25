@@ -23,9 +23,14 @@ namespace ProjectSample.ProjectSampleBootingEngine
             {
                 Console.WriteLine("Type 'create' to create new");
                 Console.WriteLine("Type 'update' to update with latest create Id with random version");
+                Console.WriteLine("Type 'quit' to close console");
+
                 var cmd = Console.ReadLine();
 
-                if (cmd == "quit") return;
+                if (cmd == "quit") {
+                    Environment.Exit(0);
+                    return;
+                }
 
                 if (cmd == "create")
                 {
