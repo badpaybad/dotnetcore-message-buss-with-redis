@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using RedisUsage.CqrsCore.RegisterEngine;
 
 namespace ProjectSample.Apis
 {
@@ -14,7 +9,16 @@ namespace ProjectSample.Apis
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args)
+                   .UseKestrel()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIISIntegration()
+                .Build().Run();
+
+
+            CommandsAndEventsRegisterEngine.Init();
+
+            CommandsAndEventsRegisterEngine.AutoRegisterForHandlers();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

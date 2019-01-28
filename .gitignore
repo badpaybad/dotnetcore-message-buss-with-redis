@@ -35,3 +35,11 @@
 /ProjectSample.ProjectSampleBootingEngine/obj
 /ProjectSample.SampleCommandHandlers/bin/Debug/netcoreapp2.1
 /ProjectSample.SampleEventHandlers/bin/Debug/netcoreapp2.1
+/ProjectSample.Apis/bin/Debug/netcoreapp2.2
+/ProjectSample.CommandsAndEvents/bin/Debug/netcoreapp2.2
+/ProjectSample.Database/bin/Debug/netcoreapp2.2
+/ProjectSample.ProjectSampleBootingEngine/bin/Debug/netcoreapp2.2
+/ProjectSample.SampleCommandHandlers/bin/Debug/netcoreapp2.2
+/ProjectSample.SampleEventHandlers/bin/Debug/netcoreapp2.2
+/RedisUsage.CqrsCore/bin/Debug/netcoreapp2.2
+/RedisUsage.RedisServices/bin/Debug/netcoreapp2.2

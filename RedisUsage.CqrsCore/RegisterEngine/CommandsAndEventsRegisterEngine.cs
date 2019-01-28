@@ -46,6 +46,10 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             RedisUsage.RedisServices.RedisServices.Init(redisHost, redisPortInt, redisPwd);
         }
 
+        /// <summary>
+        /// Consumer register
+        /// </summary>
+        /// <returns></returns>
         public static bool AutoRegisterForHandlers()
         {
             List<Assembly> allAss = FindAllDll();
