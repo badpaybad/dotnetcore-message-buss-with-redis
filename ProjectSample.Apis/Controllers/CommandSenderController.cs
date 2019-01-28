@@ -14,11 +14,17 @@ using RedisUsage.CqrsCore.RegisterEngine;
 
 namespace ProjectSample.Apis.Controllers
 {
+
     [Route("api/CommandSender")]
     [ApiController]
     [Produces("application/json")]
     public class CommandSenderController : ControllerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         [HttpPost]
         //[Authorize]
         public CommandResponse Post(CommandRequest cmd)
@@ -64,9 +70,13 @@ namespace ProjectSample.Apis.Controllers
                     Success = false
                 };
             }
-
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="typeFullName"></param>
+        /// <returns></returns>
         public string Get(string typeFullName)
         {
             string cmdTemp = JsonConvert.SerializeObject(new CreateSample(Guid.NewGuid(), "V" + DateTime.Now.GetHashCode(), "{}"));
@@ -99,12 +109,18 @@ namespace ProjectSample.Apis.Controllers
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class CommandRequest
     {
         public string CommandTypeFullName { get; set; }
         public string CommandDataJson { get; set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class CommandResponse
     {
         public Guid CommandId { get; set; }
