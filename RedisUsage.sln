@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjDb", "PrjDb", "{BD46664D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjDomainBusiness", "PrjDomainBusiness", "{7AEF947A-77B3-482E-ABC9-EF78829EA6F3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjClientUi", "PrjClientUi", "{16708B8C-B102-4ADD-B15C-3738A81FFB33}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjClientUiOrConsummer", "PrjClientUiOrConsummer", "{16708B8C-B102-4ADD-B15C-3738A81FFB33}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PrjApis", "PrjApis", "{D72AF019-AB32-4144-8B64-8827EFAC8755}"
 EndProject
@@ -33,7 +33,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.SampleEventHa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.ProjectSampleBootingEngine", "ProjectSample.ProjectSampleBootingEngine\ProjectSample.ProjectSampleBootingEngine.csproj", "{30CCC73A-B193-44CE-9BCA-56805AE3A225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSample.Apis", "ProjectSample.Apis\ProjectSample.Apis.csproj", "{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.Apis", "ProjectSample.Apis\ProjectSample.Apis.csproj", "{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.UnitTest.HandlersAndConsummers", "RedisUsage.UnitTest.HandlersAndConsummers\RedisUsage.UnitTest.HandlersAndConsummers.csproj", "{93ABB98C-3484-491A-BEB7-7C7180178ECA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisUsage.UnitTest.RedisServciesMockupTest", "RedisUsage.UnitTest.RedisServciesMockupTest\RedisUsage.UnitTest.RedisServciesMockupTest.csproj", "{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisUsage.UnitTest.CqrsCoreMockupTest", "RedisUsage.UnitTest.CqrsCoreMockupTest\RedisUsage.UnitTest.CqrsCoreMockupTest.csproj", "{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +79,18 @@ Global
 		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93ABB98C-3484-491A-BEB7-7C7180178ECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93ABB98C-3484-491A-BEB7-7C7180178ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93ABB98C-3484-491A-BEB7-7C7180178ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93ABB98C-3484-491A-BEB7-7C7180178ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +104,9 @@ Global
 		{F832609A-F0F0-4688-B977-CBA143FEEA67} = {7AEF947A-77B3-482E-ABC9-EF78829EA6F3}
 		{30CCC73A-B193-44CE-9BCA-56805AE3A225} = {16708B8C-B102-4ADD-B15C-3738A81FFB33}
 		{4DB0D30F-0EBB-42EA-88B4-0A2D1CB0652D} = {D72AF019-AB32-4144-8B64-8827EFAC8755}
+		{93ABB98C-3484-491A-BEB7-7C7180178ECA} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
+		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
+		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBCE5463-55CD-4EBB-90E8-F4AEC75FFD7E}

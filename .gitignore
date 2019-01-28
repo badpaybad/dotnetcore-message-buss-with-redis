@@ -43,3 +43,9 @@
 /ProjectSample.SampleEventHandlers/bin/Debug/netcoreapp2.2
 /RedisUsage.CqrsCore/bin/Debug/netcoreapp2.2
 /RedisUsage.RedisServices/bin/Debug/netcoreapp2.2
+/RedisUsage.UnitTest.CqrsCoreMockupTest/bin/Debug/netcoreapp2.2
+/RedisUsage.UnitTest.CqrsCoreMockupTest/obj
+/RedisUsage.UnitTest.HandlersAndConsummers/bin/Debug/netcoreapp2.2
+/RedisUsage.UnitTest.HandlersAndConsummers/obj
+/RedisUsage.UnitTest.RedisServciesMockupTest/bin/Debug/netcoreapp2.2
+/RedisUsage.UnitTest.RedisServciesMockupTest/obj
