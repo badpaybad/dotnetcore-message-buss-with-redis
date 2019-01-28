@@ -17,7 +17,7 @@ namespace RedisUsage.CqrsCore.CqrsRepository
 
         public void Publish(IEvent e)
         {
-            if (e.PublishedEventId == Guid.Empty)
+            if (e.PublishedEventId == null || e.PublishedEventId == Guid.Empty)
             {
                 e.PublishedEventId = Guid.NewGuid();
             }

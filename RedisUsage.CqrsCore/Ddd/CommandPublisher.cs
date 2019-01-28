@@ -29,7 +29,11 @@ namespace RedisUsage.CqrsCore.Ddd
             {
                 type = RedisServices.MessageBussServices.ProcessType.Stack;
             }
-
+            if (cmd.PublishedCommandId == null || cmd.PublishedCommandId == Guid.Empty)
+            {
+                cmd.PublishedCommandId = Guid.NewGuid();
+            }
+            
             //data to process command should not in topic, (topic for events)
             RedisServices.MessageBussServices.Publish(cmd, type);
         }
