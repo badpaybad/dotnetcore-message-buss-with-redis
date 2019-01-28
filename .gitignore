@@ -49,3 +49,8 @@
 /RedisUsage.UnitTest.HandlersAndConsummers/obj
 /RedisUsage.UnitTest.RedisServciesMockupTest/bin/Debug/netcoreapp2.2
 /RedisUsage.UnitTest.RedisServciesMockupTest/obj
+/ProjectSample.Apis/bin/Release/netcoreapp2.2
+/ProjectSample.CommandsAndEvents/bin/Release/netcoreapp2.2
+/ProjectSample.Database/bin/Release/netcoreapp2.2
+/RedisUsage.CqrsCore/bin/Release/netcoreapp2.2
+/RedisUsage.RedisServices/bin/Release/netcoreapp2.2

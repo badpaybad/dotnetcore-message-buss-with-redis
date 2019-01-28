@@ -11,6 +11,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
 {
     public static class CommandsAndEventsRegisterEngine
     {
+        static Dictionary<string, Type> _cmdAndEvtTypeFullname = new Dictionary<string, Type>();
 
         static CommandsAndEventsRegisterEngine()
         {
@@ -72,6 +73,11 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             }
 
             return true;
+        }
+
+        public static object TryFindType(string typeFullName, out object foundType)
+        {
+            throw new NotImplementedException();
         }
 
         private static List<Assembly> FindAllDll()
@@ -136,6 +142,14 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             var listHandler = allTypes.Where(t => typeof(ICqrsHandle).IsAssignableFrom(t)
                                                   && t.IsClass && !t.IsAbstract).ToList();
 
+            var listCmdsEvts= allTypes.Where(t => (typeof(ICommand).IsAssignableFrom(t) || typeof(IEvent).IsAssignableFrom(t))
+                                                   && t.IsClass && !t.IsAbstract).ToList();
+
+            foreach(var pParameterType in listCmdsEvts)
+            {
+                RegisterCommandOrEventType(pParameterType);
+            }
+           
             var assemblyFullName = executingAssembly.FullName;
             if (listHandler.Count <= 0)
             {
@@ -169,7 +183,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
                     if (typeof(IEvent).IsAssignableFrom(pParameterType))
                     {
                         var typeFullAssemblyQualifiedName = pParameterType.AssemblyQualifiedName;
-
+                       
                         var className = mi.DeclaringType.FullName;
 
                         RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{typeFullAssemblyQualifiedName}", typeFullAssemblyQualifiedName, (o) =>
@@ -183,7 +197,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
                     if (typeof(ICommand).IsAssignableFrom(pParameterType))
                     {
                         var typeFullAssemblyQualifiedName = pParameterType.AssemblyQualifiedName;
-
+                                            
                         var className = mi.DeclaringType.FullName;
 
                         RedisUsage.RedisServices.MessageBussServices.Subscribe($"{className}_{typeFullAssemblyQualifiedName}", typeFullAssemblyQualifiedName, (o) =>
@@ -197,6 +211,31 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             }
         }
 
+        private static void RegisterCommandOrEventType(Type pParameterType)
+        {
+            lock (_cmdAndEvtTypeFullname)
+            {
+                var tfn = pParameterType.FullName;
+                if (_cmdAndEvtTypeFullname.ContainsKey(tfn) == false)
+                {
+                    _cmdAndEvtTypeFullname[tfn] = pParameterType;
+                }
+            }
+        }
 
+        public static bool TryFindType(string typeFullName, out Type type)
+        {
+            type = null;
+
+            lock (_cmdAndEvtTypeFullname)
+            {
+                if (_cmdAndEvtTypeFullname.TryGetValue(typeFullName, out type))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

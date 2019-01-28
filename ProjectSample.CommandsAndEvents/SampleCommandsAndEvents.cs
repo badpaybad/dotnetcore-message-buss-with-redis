@@ -13,6 +13,8 @@ namespace ProjectSample.CommandsAndEvents
         public string SampleVersion { get; set; }
         public string SampleJsonData { get; set; }
 
+        public CreateSample() { }
+
         public CreateSample( Guid sampleId, string sampleVersion, string sampleJsonData)
         {
             SampleId = sampleId;
@@ -29,6 +31,8 @@ namespace ProjectSample.CommandsAndEvents
         public Guid SampleId { get; set; }
 
         public string SampleVersion { get; set; }
+
+        public ChangeVersionOfSample() { }
 
         public ChangeVersionOfSample(Guid sampleId, string sampleVersion)
         {
@@ -47,6 +51,8 @@ namespace ProjectSample.CommandsAndEvents
         public string SampleVersion { get; set; }
         public string SampleJsonData { get; set; }
 
+        public SampleCreated() { }
+
         public SampleCreated(Guid sampleId, string sampleVersion, string sampleJsonData)
         {
             SampleId = sampleId;
@@ -62,6 +68,8 @@ namespace ProjectSample.CommandsAndEvents
 
         public Guid SampleId { get; set; }
         public string SampleVersion { get; set; }
+
+        public SampleVersionChanged() { }
 
         public SampleVersionChanged(Guid sampleId, string sampleVersion)
         {

@@ -18,7 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj" />
     <ProjectReference Include="..\RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

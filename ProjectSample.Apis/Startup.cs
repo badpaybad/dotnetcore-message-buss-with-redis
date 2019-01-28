@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NJsonSchema;
 using NSwag.AspNetCore;
+using RedisUsage.CqrsCore.RegisterEngine;
 
 namespace ProjectSample.Apis
 {
@@ -30,6 +31,11 @@ namespace ProjectSample.Apis
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+
+            CommandsAndEventsRegisterEngine.Init();
+
+            CommandsAndEventsRegisterEngine.AutoRegisterForHandlers();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
