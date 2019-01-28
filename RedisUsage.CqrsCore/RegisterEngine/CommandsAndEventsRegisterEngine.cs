@@ -27,6 +27,10 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             //}
         }
 
+        /// <summary>
+        /// Build setting from appsettings.json
+        /// </summary>
+        /// <param name="appSettingsFileName"></param>
         public static void Init(string appSettingsFileName = "appsettings.json")
         {
             IConfiguration config = new ConfigurationBuilder()
@@ -74,28 +78,42 @@ namespace RedisUsage.CqrsCore.RegisterEngine
         {
             // return AppDomain.CurrentDomain.GetAssemblies();
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
             List<Assembly> allAssemblies = new List<Assembly>();
 
             allAssemblies.AddRange(AppDomain.CurrentDomain.GetAssemblies());
 
             var dllFiles = Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories);
+
             foreach (string dll in dllFiles)
             {
                 if (File.Exists(dll))
                 {
+                    Assembly assbl;
+
                     try
                     {
                         //allAssemblies.Add(Assembly.LoadFile(dll));
-                        var assbl = AssemblyLoadContext.Default.LoadFromAssemblyPath(dll);
-                        allAssemblies.Add(assbl);
+                        assbl = AssemblyLoadContext.Default.LoadFromAssemblyPath(dll);
+
                     }
                     catch (Exception)
                     {
                         //Console.WriteLine(ex.GetAllMessages() + "\r\n" + "Can not load dll: " + dll);
+                        assbl = Assembly.LoadFile(dll);
+                    }
+
+                    if (assbl != null)
+                    {
+                        allAssemblies.Add(assbl);
                     }
                 }
             }
             // return allAssemblies;
+
+            var rescanDlls = AppDomain.CurrentDomain.GetAssemblies();
+
+            allAssemblies.AddRange(rescanDlls);
 
             Dictionary<string, Assembly> filter = new Dictionary<string, Assembly>();
 
@@ -107,6 +125,10 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             return filter.Values.ToList();
         }
 
+        /// <summary>
+        /// Register consummer
+        /// </summary>
+        /// <param name="executingAssembly"></param>
         public static void RegisterAssemblyForHandlers(Assembly executingAssembly)
         {
             var allTypes = executingAssembly.GetTypes();
