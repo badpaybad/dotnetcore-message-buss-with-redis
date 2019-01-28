@@ -29,7 +29,7 @@ namespace ProjectSample.Apis.Controllers
 
                 Type foundType;
 
-                var found = CommandsAndEventsRegisterEngine.TryFindType(cmd.CommandTypeFullName, out foundType);
+                var found = CommandsAndEventsRegisterEngine.TryFindCommandOrEventType(cmd.CommandTypeFullName, out foundType);
 
                 if (!found)
                 {
@@ -83,7 +83,7 @@ namespace ProjectSample.Apis.Controllers
 
             Type foundType;
 
-            var found = CommandsAndEventsRegisterEngine.TryFindType(typeFullName, out foundType);
+            var found = CommandsAndEventsRegisterEngine.TryFindCommandOrEventType(typeFullName, out foundType);
 
             if (!found)
             {

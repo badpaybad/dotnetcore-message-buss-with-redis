@@ -74,12 +74,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
 
             return true;
         }
-
-        public static object TryFindType(string typeFullName, out object foundType)
-        {
-            throw new NotImplementedException();
-        }
-
+              
         private static List<Assembly> FindAllDll()
         {
             // return AppDomain.CurrentDomain.GetAssemblies();
@@ -223,7 +218,7 @@ namespace RedisUsage.CqrsCore.RegisterEngine
             }
         }
 
-        public static bool TryFindType(string typeFullName, out Type type)
+        public static bool TryFindCommandOrEventType(string typeFullName, out Type type)
         {
             type = null;
 
