@@ -15,11 +15,10 @@ namespace ProjectSample.Apis
             .UseIISIntegration()
             .Build()
             .Run();
-            //https://stackify.com/how-to-deploy-asp-net-core-to-iis/
-            //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-2.2
 
-            //https://www.microsoft.com/net/permalink/dotnetcore-current-windows-runtime-bundle-installer
-
+            //https://weblog.west-wind.com/posts/2016/Jun/06/Publishing-and-Running-ASPNET-Core-Applications-with-IIS
+            //Microsoft.AspNetCore.Hosting
+            //DotNetCore.1.0.0.RC2-WindowsHosting
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
