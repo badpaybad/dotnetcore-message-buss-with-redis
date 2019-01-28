@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectSample.CommandsAndEvents\ProjectSample.CommandsAndEvents.csproj" />
+    <ProjectReference Include="..\ProjectSample.Database\ProjectSample.Database.csproj" />
     <ProjectReference Include="..\RedisUsage.CqrsCore\RedisUsage.CqrsCore.csproj" />
   </ItemGroup>
 
