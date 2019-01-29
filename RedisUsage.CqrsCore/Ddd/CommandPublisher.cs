@@ -13,7 +13,8 @@ namespace RedisUsage.CqrsCore.Ddd
             _instance = _instance ?? new CommandPublisher();
         }
 
-        private CommandPublisher()
+        //private CommandPublisher() can be private constructor for singleton instance
+        public CommandPublisher()
         {
 
         }
@@ -29,6 +30,7 @@ namespace RedisUsage.CqrsCore.Ddd
             {
                 type = RedisServices.MessageBussServices.ProcessType.Stack;
             }
+
             if (cmd.PublishedCommandId == null || cmd.PublishedCommandId == Guid.Empty)
             {
                 cmd.PublishedCommandId = Guid.NewGuid();

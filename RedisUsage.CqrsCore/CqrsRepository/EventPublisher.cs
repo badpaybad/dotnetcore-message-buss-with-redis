@@ -13,6 +13,12 @@ namespace RedisUsage.CqrsCore.CqrsRepository
             _instance = _instance ?? new EventPublisher();
         }
 
+        //private EventPublisher() can be private constructor for singleton instance
+        public EventPublisher()
+        {
+
+        }
+
         public IEventPublisher Instance { get { return _instance; } }
 
         public void Publish(IEvent e)
