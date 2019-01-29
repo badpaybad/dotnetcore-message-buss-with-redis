@@ -30,8 +30,5 @@ namespace RedisUsage.CqrsCore.CqrsRepository
 
             RedisServices.MessageBussServices.Publish(e, RedisServices.MessageBussServices.ProcessType.Topic);
         }
-
-
-
     }
 }

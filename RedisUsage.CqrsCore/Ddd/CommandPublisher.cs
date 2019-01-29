@@ -20,8 +20,7 @@ namespace RedisUsage.CqrsCore.Ddd
         }
 
         public static ICommandPublisher Instance { get { return _instance; } }
-
-
+        
         public void Send(ICommand cmd, bool isDataInStack = false)
         {
             RedisServices.MessageBussServices.ProcessType type = RedisServices.MessageBussServices.ProcessType.Queue;

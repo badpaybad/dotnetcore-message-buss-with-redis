@@ -42,7 +42,6 @@ namespace ProjectSample.Apis.Controllers
             };
         }
 
-
         [Route("GetPaging")]
         public List<object> GetPaging(int? skip = 0, int? take = 10)
         {
