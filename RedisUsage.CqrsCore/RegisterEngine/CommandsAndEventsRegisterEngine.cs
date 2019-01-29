@@ -232,5 +232,13 @@ namespace RedisUsage.CqrsCore.RegisterEngine
 
             return false;
         }
+
+        public static List<Type> ListAvailableCommandOrEventType()
+        {
+            lock (_cmdAndEvtTypeFullname)
+            {
+                return _cmdAndEvtTypeFullname.Values.ToList();
+            }
+        }
     }
 }

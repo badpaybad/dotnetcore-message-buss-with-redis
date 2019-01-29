@@ -21,9 +21,11 @@ namespace ProjectSample.ProjectSampleBootingEngine
 
             while (true)
             {
+                Console.WriteLine("--- Menu:Begin ---");
                 Console.WriteLine("Type 'create' to create new");
                 Console.WriteLine("Type 'update' to update with latest create Id with random version");
                 Console.WriteLine("Type 'quit' to close console");
+                Console.WriteLine("--- Menu:End ---");
 
                 var cmd = Console.ReadLine();
 

@@ -107,6 +107,27 @@ namespace ProjectSample.Apis.Controllers
 
             return JsonConvert.SerializeObject(request);
         }
+
+        [Route("ListDumyCommandRequestAvailable")]
+        public List<CommandRequest> ListDumyCommandRequestAvailable()
+        {
+            var listType = CommandsAndEventsRegisterEngine.ListAvailableCommandOrEventType();
+
+            List<CommandRequest> result = new List<CommandRequest>();
+
+            foreach (var type in listType)
+            {
+                if (typeof(ICommand).IsAssignableFrom(type) == false) continue;
+
+                result.Add(new CommandRequest()
+                {
+                    CommandTypeFullName = type.FullName,
+                    CommandDataJson= JsonConvert.SerializeObject(Activator.CreateInstance(type))
+                });
+            }
+
+            return result;
+        }
     }
 
     /// <summary>

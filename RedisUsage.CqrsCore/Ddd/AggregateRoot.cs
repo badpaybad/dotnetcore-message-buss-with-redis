@@ -7,6 +7,11 @@ namespace RedisUsage.CqrsCore.Ddd
 {
     public abstract class AggregateRoot : IAggregateRoot
     {
+        public AggregateRoot()
+        {
+
+        }
+
         public abstract Guid Id { get; set; }
 
         private readonly IList<IEvent> _changes = new List<IEvent>();

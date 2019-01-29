@@ -11,13 +11,25 @@ namespace ProjectSample.SampleCommandHandlers
         public override Guid Id { get; set; }
 
         public ProjectSampleDdd() { }
-               
+
+        #region private Apply method
+
+        string _version;
+
         void Apply(SampleCreated e)
         {
             Id = e.SampleId;
+            _version = e.SampleVersion;
+        }
+
+
+        void Apply(SampleVersionChanged e)
+        {
+            _version = e.SampleVersion;
 
         }
 
+        #endregion
 
         public ProjectSampleDdd(Guid sampleId, string sampleVersion, string sampleJsonData)
         {

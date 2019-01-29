@@ -116,7 +116,7 @@ namespace RedisUsage.CqrsCore.CqrsRepository
                 lastVersion++;
                 e.Version = lastVersion;
 
-                if (e.PublishedEventId == null)
+                if (e.PublishedEventId == null || e.PublishedEventId == Guid.Empty)
                 {
                     e.PublishedEventId = Guid.NewGuid();
                 }
@@ -130,7 +130,7 @@ namespace RedisUsage.CqrsCore.CqrsRepository
                     EventData = JsonConvert.SerializeObject(e),
                     EventType = e.GetType().AssemblyQualifiedName,
                     Version = lastVersion,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.UtcNow
                 });
             }
 
