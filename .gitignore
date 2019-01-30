@@ -54,3 +54,5 @@
 /ProjectSample.Database/bin/Release/netcoreapp2.2
 /RedisUsage.CqrsCore/bin/Release/netcoreapp2.2
 /RedisUsage.RedisServices/bin/Release/netcoreapp2.2
+/Mqtt.MqttServerBrocker/bin/Debug/netcoreapp2.2
+/Mqtt.MqttServerBrocker/obj

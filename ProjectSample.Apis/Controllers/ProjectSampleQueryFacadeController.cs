@@ -70,8 +70,7 @@ namespace ProjectSample.Apis.Controllers
                     temp.Add(new
                     {
                         Id = r.Id,
-                        Version = r.Version,
-                        InnerData = JsonConvert.DeserializeObject<Sample>(r.JsonData)
+                        Version = r.Version
                     });
                 }
                 else
@@ -79,8 +78,7 @@ namespace ProjectSample.Apis.Controllers
                     temp.Add(new
                     {
                         Id = r.Id,
-                        Version = r.Version,
-                        InnerData = new Sample()
+                        Version = r.Version
                     });
                 }
 

@@ -37,9 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectSample.Apis", "Proje
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.UnitTest.HandlersAndConsummers", "RedisUsage.UnitTest.HandlersAndConsummers\RedisUsage.UnitTest.HandlersAndConsummers.csproj", "{93ABB98C-3484-491A-BEB7-7C7180178ECA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisUsage.UnitTest.RedisServciesMockupTest", "RedisUsage.UnitTest.RedisServciesMockupTest\RedisUsage.UnitTest.RedisServciesMockupTest.csproj", "{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.UnitTest.RedisServciesMockupTest", "RedisUsage.UnitTest.RedisServciesMockupTest\RedisUsage.UnitTest.RedisServciesMockupTest.csproj", "{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedisUsage.UnitTest.CqrsCoreMockupTest", "RedisUsage.UnitTest.CqrsCoreMockupTest\RedisUsage.UnitTest.CqrsCoreMockupTest.csproj", "{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedisUsage.UnitTest.CqrsCoreMockupTest", "RedisUsage.UnitTest.CqrsCoreMockupTest\RedisUsage.UnitTest.CqrsCoreMockupTest.csproj", "{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mqtt", "Mqtt", "{B2BA5B14-27DA-4420-9583-169402B1EEDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt.MqttServerBrocker", "Mqtt.MqttServerBrocker\Mqtt.MqttServerBrocker.csproj", "{BF4B63BA-2B0F-4773-943E-F5E42449DE9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,10 @@ Global
 		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF4B63BA-2B0F-4773-943E-F5E42449DE9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF4B63BA-2B0F-4773-943E-F5E42449DE9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF4B63BA-2B0F-4773-943E-F5E42449DE9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF4B63BA-2B0F-4773-943E-F5E42449DE9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +115,7 @@ Global
 		{93ABB98C-3484-491A-BEB7-7C7180178ECA} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
 		{1A697EFD-5B48-4F44-98B1-FB1B01F1BF9B} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
 		{EB7B1948-FFA9-4E9B-9BD8-231D15091DF4} = {0D7C6251-6218-492F-81BF-FCCDE443E701}
+		{BF4B63BA-2B0F-4773-943E-F5E42449DE9B} = {B2BA5B14-27DA-4420-9583-169402B1EEDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBCE5463-55CD-4EBB-90E8-F4AEC75FFD7E}
