@@ -1,9 +1,12 @@
-﻿using MQTTnet;
+﻿using Confluent.Kafka;
+using Confluent.Kafka.Serialization;
+using MQTTnet;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +17,6 @@ namespace Mqtt.MqttServerBrocker
     {
         static MqttFactory _mqttfactory = new MqttFactory();
         static IMqttServer _mqttServer;
-
-        static MQTTnet.Client.IMqttClient _mqttClient;
 
         public static void Main(string[] args)
         {
@@ -33,13 +34,9 @@ namespace Mqtt.MqttServerBrocker
 
             Console.WriteLine("server started");
 
-            var tclient = InitClient();
-            tclient.Wait();
-
-            Console.WriteLine("client started");
-
             while (true)
             {
+                Console.WriteLine("--------------");
                 Console.WriteLine("Type 'quit' to quit");
 
                 var cmd = Console.ReadLine();
@@ -53,31 +50,31 @@ namespace Mqtt.MqttServerBrocker
                     return;
                 }
 
-                if (cmd.StartsWith("c-p"))
-                {
-                    if (_mqttClient == null)
-                    {
-                        tclient = InitClient();
-                        tclient.Wait();
-                    }
+                //if (cmd.StartsWith("c-p"))
+                //{
+                //    //if (_mqttClient == null)
+                //    //{
+                //    //    tclient = InitClient();
+                //    //    tclient.Wait();
+                //    //}
 
-                    Console.WriteLine("Client push message");
+                //    Console.WriteLine("Client push message");
 
-                    var applicationMessage = new MqttApplicationMessageBuilder()
-                      .WithTopic("A/B/C")
-                      .WithPayload("Hello World to server")
-                      .WithAtLeastOnceQoS()
-                      .Build();
+                //    var applicationMessage = new MqttApplicationMessageBuilder()
+                //      .WithTopic("A/B/C")
+                //      .WithPayload("Hello World to server")
+                //      .WithAtLeastOnceQoS()
+                //      .Build();
 
-                    var tclientPush = _mqttClient.PublishAsync(applicationMessage);
-                    tclientPush.Wait();
-                }
+                //    //var tclientPush = _mqttClient.PublishAsync(applicationMessage);
+                //    //tclientPush.Wait();
+                //}
 
                 if (cmd.StartsWith("s-p"))
                 {
                     try
                     {
-                        var clientId =  cmd.Substring("s-p".Length + 1).Trim();
+                        var clientId = cmd.Substring("s-p".Length + 1).Trim();
 
                         _mqttServer.PublishAsync(new MqttApplicationMessageBuilder()
                             .WithTopic(clientId)
@@ -91,55 +88,10 @@ namespace Mqtt.MqttServerBrocker
                         Console.WriteLine(ex.Message);
                     }
                 }
+
             }
 
         }
-
-        private static async Task InitClient()
-        {
-            if (_mqttClient == null)
-            {
-                _mqttClient = _mqttfactory.CreateMqttClient();
-
-                var option = new MQTTnet.Client.MqttClientOptions
-                {
-                    ChannelOptions = new MQTTnet.Client.MqttClientTcpOptions
-                    {
-                        Server = "127.0.0.1"
-                    },
-                    ClientId = "dudu_"+ Guid.NewGuid().ToString(),
-                    //KeepAlivePeriod = new TimeSpan(0, 0, 1)
-                };
-
-                _mqttClient.ApplicationMessageReceived += (sender, e) =>
-                {
-                    Console.WriteLine("Client Received: Do anything you want");
-                    Console.WriteLine("Sender");
-                    Console.WriteLine(JsonConvert.SerializeObject(sender));
-                    Console.WriteLine("MqttApplicationMessageReceivedEventArgs");
-                    Console.WriteLine(JsonConvert.SerializeObject(e));
-                };
-
-                _mqttClient.Disconnected += (sender, e) =>
-                {
-                    //try reconnect
-                    _mqttClient.ConnectAsync(option);
-                };
-
-                await _mqttClient.ConnectAsync(option);
-
-                await _mqttClient.SubscribeAsync(new List<TopicFilter>() {
-                    new TopicFilterBuilder()
-                    .WithTopic(_mqttClient.Options.ClientId)
-                    .WithAtLeastOnceQoS()
-                    .Build()
-
-                });
-
-            }
-        }
-
-
 
         private static MqttServerOptions BuildMqttServerOptions()
         {
@@ -192,16 +144,34 @@ namespace Mqtt.MqttServerBrocker
 
         private static void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
+            
             Console.WriteLine("Server Received: Should implement code to push data to Kafka");
             Console.WriteLine("Sender");
             Console.WriteLine(JsonConvert.SerializeObject(sender));
             Console.WriteLine("MqttApplicationMessageReceivedEventArgs");
             Console.WriteLine(JsonConvert.SerializeObject(e));
 
-            Console.WriteLine(Encoding.UTF8.GetString(e.ApplicationMessage.Payload));
+            string text = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
+            var config = new Dictionary<string, object>
+                                      {
+                                        { "bootstrap.servers", "127.0.0.1:2181" },
+                                        { "acks", "all" }
+                                      };
+
+            Console.WriteLine("Push to Kafka");
+            var sw = Stopwatch.StartNew();
+            using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
+            {
+                var result = producer.ProduceAsync(e.ClientId, null, text).GetAwaiter().GetResult();
+
+                producer.Flush(1000);
+            }
+            sw.Stop();
+            Console.WriteLine($"Pushed MSG: {text} to TOPIC: {e.ClientId} into Kafka in miliseconds: {sw.ElapsedMilliseconds}");
 
         }
+
 
         private static void _mqttServer_ClientUnsubscribedTopic(object sender, MqttClientUnsubscribedTopicEventArgs e)
         {
