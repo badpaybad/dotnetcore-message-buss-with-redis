@@ -23,7 +23,8 @@ namespace ProjectSample.Apis.Controllers
             var config = new Dictionary<string, object>
                                       {
                                         { "bootstrap.servers",  ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:2181" },
-                                        { "acks", "all" }
+                                        { "acks", "all" },
+                {"retries",3 }
                                       };
 
             Console.WriteLine("Push to Kafka");

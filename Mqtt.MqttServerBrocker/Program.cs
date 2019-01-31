@@ -142,7 +142,7 @@ namespace Mqtt.MqttServerBrocker
             return options;
         }
 
-        private static void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
+        private static async void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
             
             Console.WriteLine("Server Received: Should implement code to push data to Kafka");
@@ -155,7 +155,7 @@ namespace Mqtt.MqttServerBrocker
 
             var config = new Dictionary<string, object>
                                       {
-                                        { "bootstrap.servers", "127.0.0.1:2181" },
+                                        { "bootstrap.servers", "localhost:2181" },
                                         { "acks", "all" }
                                       };
 
@@ -163,7 +163,7 @@ namespace Mqtt.MqttServerBrocker
             var sw = Stopwatch.StartNew();
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
-                var result = producer.ProduceAsync(e.ClientId, null, text).GetAwaiter().GetResult();
+                var result = await producer.ProduceAsync(e.ClientId, null, text);
 
                 producer.Flush(1000);
             }
