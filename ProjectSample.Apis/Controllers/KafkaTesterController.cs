@@ -30,10 +30,12 @@ namespace ProjectSample.Apis.Controllers
             var sw = Stopwatch.StartNew();
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
-                var result =await producer.ProduceAsync(topic, null, text);
+                var result = await producer.ProduceAsync(topic, null, text);
 
                 producer.Flush(1000);
             }
+            sw.Stop();
+            Console.WriteLine($"Pushed MSG: {text} to TOPIC: {topic} into Kafka in miliseconds: {sw.ElapsedMilliseconds}");
 
             return new
             {
@@ -41,8 +43,6 @@ namespace ProjectSample.Apis.Controllers
                 Topic = topic
             };
         }
-
-       
 
     }
 }
