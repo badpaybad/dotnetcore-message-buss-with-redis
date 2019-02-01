@@ -10,7 +10,7 @@ namespace ProjectSample.Apis
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
-                   .UseKestrel()
+            .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
             .UseIISIntegration()
             .Build()
@@ -18,7 +18,7 @@ namespace ProjectSample.Apis
 
             //https://weblog.west-wind.com/posts/2016/Jun/06/Publishing-and-Running-ASPNET-Core-Applications-with-IIS
             //Microsoft.AspNetCore.Hosting
-            //https://dotnet.microsoft.com/download/dotnet-core
+            //https://dotnet.microsoft.com/download/thank-you/dotnet-sdk-2.2.103-windows-x64-installer
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
