@@ -18,7 +18,6 @@ namespace ProjectSample.Apis.Controllers
         [Route("ClientSendData")]
         public async Task<object> ClientSendData(string topic, string msg)
         {
-            string text = msg;
             var kafkaHost = ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:9092";
 
             var config = new Dictionary<string, object>
@@ -32,12 +31,12 @@ namespace ProjectSample.Apis.Controllers
             var sw = Stopwatch.StartNew();
             using (var producer = new Producer<Null, string>(config, null, new StringSerializer(Encoding.UTF8)))
             {
-                var result = await producer.ProduceAsync(topic, null, text);
+                var result = await producer.ProduceAsync(topic, null, msg);
 
                 producer.Flush(1000);
             }
             sw.Stop();
-            Console.WriteLine($"Pushed MSG: {text} to TOPIC: {topic} into Kafka in miliseconds: {sw.ElapsedMilliseconds}");
+            Console.WriteLine($"Pushed into Kafka MSG: '{msg}' to TOPIC: {topic} in miliseconds: {sw.ElapsedMilliseconds}");
 
             return new
             {

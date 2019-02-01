@@ -43,11 +43,14 @@ namespace ProjectSample.Apis.Controllers
             {
                 _mqttClient = _mqttfactory.CreateMqttClient();
 
+                var mqttHost = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1";
+
+
                 var option = new MQTTnet.Client.MqttClientOptions
                 {
                     ChannelOptions = new MQTTnet.Client.MqttClientTcpOptions
                     {
-                        Server = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1"
+                        Server = mqttHost
                     },
                     ClientId = "dudu_" + Guid.NewGuid().ToString(),
                     //KeepAlivePeriod = new TimeSpan(0, 0, 1)
