@@ -18,7 +18,7 @@ namespace ProjectSample.Apis
 
             //https://weblog.west-wind.com/posts/2016/Jun/06/Publishing-and-Running-ASPNET-Core-Applications-with-IIS
             //Microsoft.AspNetCore.Hosting
-            //DotNetCore.1.0.0.RC2-WindowsHosting
+            //https://dotnet.microsoft.com/download/dotnet-core
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

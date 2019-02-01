@@ -33,7 +33,6 @@ namespace Mqtt.MqttServerBrocker
             _mqttConfig = new Dictionary<string, object>
                                       {
                                        { "bootstrap.servers", mqttHost },
-
                                         { "acks", "all" }
                                       };
 
