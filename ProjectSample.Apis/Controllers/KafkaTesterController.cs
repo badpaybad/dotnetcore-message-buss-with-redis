@@ -19,10 +19,11 @@ namespace ProjectSample.Apis.Controllers
         public async Task<object> ClientSendData(string topic, string msg)
         {
             string text = msg;
+            var kafkaHost = ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:9092";
 
             var config = new Dictionary<string, object>
                                       {
-                                        { "bootstrap.servers",  ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:2181" },
+                                        { "bootstrap.servers",  kafkaHost },
                                         { "acks", "all" },
                 {"retries",3 }
                                       };

@@ -42,8 +42,10 @@ namespace ProjectSample.SampleCommandHandlers
         public void ChangeVersion(string sampleVersion)
         {
             var sampleId = Id;
+            
 
             ApplyChange(new SampleVersionChanged(sampleId, sampleVersion));
         }
+
     }
 }
