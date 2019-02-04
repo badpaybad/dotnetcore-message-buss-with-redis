@@ -46,4 +46,6 @@ The console sample of Handle data and process
 ### DDD and Eventsourcing 
 We can add DDD and Eventsourcing in CommandHandler. We can call to Aggregate Repository to build Domain business and call function.
     https://github.com/badpaybad/cqrs-dot-net-core
+	
+# MQTT with Mqttnet + Kafka or Redis
 
