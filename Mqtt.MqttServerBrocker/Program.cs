@@ -26,6 +26,16 @@ namespace Mqtt.MqttServerBrocker
         {
             //TestPushDataToKafka();
             //return;
+            var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
+            var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
+            var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
+            int? redisPortInt = null;
+            if (!string.IsNullOrEmpty(redisPort))
+            {
+                redisPortInt = int.Parse(redisPort);
+            }
+
+            RedisUsage.RedisServices.RedisServices.Init(redisHost, redisPortInt, redisPwd);
 
             _kafkaHost = ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:9092";
             var mqttHost = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1";
@@ -157,15 +167,20 @@ namespace Mqtt.MqttServerBrocker
 
             string text = JsonConvert.SerializeObject(msgToKafka);
 
-            using (var producer = new Producer<Null, string>(_mqttConfig, null, new StringSerializer(Encoding.UTF8)))
-            {
-                var result = await producer.ProduceAsync(e.ClientId, null, text);
+            //can do with redis queue
+            RedisUsage.RedisServices.RedisServices.TryEnqueue(e.ClientId, text);
+            Console.WriteLine($"Pushed into Redis MSG: '{text}' to QUEUE: {e.ClientId} in miliseconds: {sw.ElapsedMilliseconds}");
 
-                producer.Flush(100);
-            }
-            sw.Stop();
+            // or use kafka
+            //using (var producer = new Producer<Null, string>(_mqttConfig, null, new StringSerializer(Encoding.UTF8)))
+            //{
+            //    var result = await producer.ProduceAsync(e.ClientId, null, text);
 
-            Console.WriteLine($"Pushed into Kafka MSG: '{text}' to TOPIC: {e.ClientId} in miliseconds: {sw.ElapsedMilliseconds}");
+            //    producer.Flush(100);
+            //}
+            //sw.Stop();
+
+            //Console.WriteLine($"Pushed into Kafka MSG: '{text}' to TOPIC: {e.ClientId} in miliseconds: {sw.ElapsedMilliseconds}");
         }
 
 
