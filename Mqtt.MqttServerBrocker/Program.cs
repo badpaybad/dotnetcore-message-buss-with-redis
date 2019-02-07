@@ -24,8 +24,7 @@ namespace Mqtt.MqttServerBrocker
 
         public static void Main(string[] args)
         {
-            //TestPushDataToKafka();
-            //return;
+           
             var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
             var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
             var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
@@ -76,7 +75,10 @@ namespace Mqtt.MqttServerBrocker
                     Environment.Exit(0);
                     return;
                 }
-
+                if (cmd == "kafka-test")
+                {
+                    TestPushDataToKafka();
+                }
                 if (cmd.StartsWith("s-p"))
                 {
                     try
@@ -203,6 +205,37 @@ namespace Mqtt.MqttServerBrocker
         {
             //throw new NotImplementedException();
         }
+
+        #region tesing only
+
+        private static void TestPushDataToKafka()
+        {
+            var topic = "dudu_test";
+            var text = "Heello";
+            var kafkaHost = ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:9092";
+
+            var config = new Dictionary<string, object>
+                                      {
+                                        { "bootstrap.servers", kafkaHost },
+                                        { "acks", "all" },
+                                        { "retries",3 },
+                                      };
+
+            Console.WriteLine("Push to Kafka");
+            var sw = Stopwatch.StartNew();
+            using (var producer = new Producer<string, string>(config, new StringSerializer(Encoding.UTF8), new StringSerializer(Encoding.UTF8)))
+            {
+                var result = producer.ProduceAsync(topic, null, text).GetAwaiter().GetResult();
+
+                producer.Flush(1);
+            }
+            sw.Stop();
+            Console.WriteLine($"Pushed MSG: '{text}' to TOPIC: {topic} into Kafka in miliseconds: {sw.ElapsedMilliseconds}");
+            Console.WriteLine("Press 'Enter' key for close");
+        }
+
+        #endregion
+
     }
 
     public class RetainedMessageHandler : IMqttServerStorage
@@ -237,35 +270,6 @@ namespace Mqtt.MqttServerBrocker
             return Task.FromResult(retainedMessages);
         }
 
-        #region tesing only
-
-        private static void TestPushDataToKafka()
-        {
-            var topic = "dudu_test";
-            var text = "Heello";
-            var kafkaHost = ConfigurationManagerExtensions.GetValueByKey("Kafka:Host") ?? "127.0.0.1:9092";
-
-            var config = new Dictionary<string, object>
-                                      {
-                                        { "bootstrap.servers", kafkaHost },
-                                        { "acks", "all" },
-                                        { "retries",3 },
-                                      };
-
-            Console.WriteLine("Push to Kafka");
-            var sw = Stopwatch.StartNew();
-            using (var producer = new Producer<string, string>(config, new StringSerializer(Encoding.UTF8), new StringSerializer(Encoding.UTF8)))
-            {
-                var result = producer.ProduceAsync(topic, null, text).GetAwaiter().GetResult();
-
-                producer.Flush(1);
-            }
-            sw.Stop();
-            Console.WriteLine($"Pushed MSG: '{text}' to TOPIC: {topic} into Kafka in miliseconds: {sw.ElapsedMilliseconds}");
-            Console.WriteLine("Press 'Enter' key for close");
-        }
-
-        #endregion
-
+  
     }
 }
