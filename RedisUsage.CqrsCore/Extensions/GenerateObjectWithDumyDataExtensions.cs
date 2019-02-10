@@ -9,7 +9,7 @@ namespace RedisUsage.CqrsCore.Extensions
     public static class GenerateObjectWithDumyDataExtensions
     {
         static Random _rnd = new Random();
-        static ConcurrentDictionary<string, int> _maped = new ConcurrentDictionary<string, int>();
+        static ConcurrentDictionary<string, int> _mapped = new ConcurrentDictionary<string, int>();
 
         static Type _currentInstanceType;
 
@@ -18,7 +18,7 @@ namespace RedisUsage.CqrsCore.Extensions
             var instanceType = typeof(T);
             var instance = new T();
 
-            _maped.Clear();
+            _mapped.Clear();
 
             _currentInstanceType = instanceType;
 
@@ -29,9 +29,10 @@ namespace RedisUsage.CqrsCore.Extensions
                 if (IsIgnoreAttribute(pi)) continue;
 
                 var val = BuildDumyDataForProp(pi.PropertyType, instance);
-
                 if (pi.GetSetMethod() != null)
                 {
+                    if (val == null) { val = Activator.CreateInstance(pi.PropertyType); }
+
                     pi.SetValue(instance, val);
                 }
             }
@@ -44,18 +45,18 @@ namespace RedisUsage.CqrsCore.Extensions
             var instance = Activator.CreateInstance(instanceType);
             var key = objOrigin.GetType() + "__" + instanceType;
 
-            if (_maped.ContainsKey(key))
+            if (_mapped.ContainsKey(key))
             {
-                if (_maped[key] > 0)
+                if (_mapped[key] > 0)
                 {
                     return null;
                 }
 
-                _maped[key] = _maped[key] + 1;
+                _mapped[key] = _mapped[key] + 1;
             }
             else
             {
-                _maped[key] = 0;
+                _mapped[key] = 0;
             }
 
             var instanceProperties = instanceType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty);
@@ -65,11 +66,15 @@ namespace RedisUsage.CqrsCore.Extensions
                 if (IsIgnoreAttribute(pi)) continue;
 
                 var val = BuildDumyDataForProp(pi.PropertyType, instance);
-
-                if (pi.GetSetMethod() != null)
+                if (val != null)
                 {
-                    pi.SetValue(instance, val);
-                }
+                    if (pi.GetSetMethod() != null)
+                    {
+                        if (val == null) { val = Activator.CreateInstance(pi.PropertyType); }
+
+                        pi.SetValue(instance, val);
+                    }
+                }               
             }
 
             return instance;

@@ -29,11 +29,18 @@ namespace RedisUsage.UnitTest.CqrsCoreMockupTest
 
             public List<DumyTest> List { get; set; }
             
-            public Queue<DumyTest> Queue { get; set; }
-
             public DumyTest MySelf { get; set; }
 
             public SubDumyTest SubTest { get; set; }
+
+            public int Age { get; set; }
+            public DateTime Dob { get; set; }
+            public decimal Cash { get; set; }
+            public double Timeout { get; set; }
+            public long Year { get; set; }
+            public Guid Cmnd { get; set; }
+            public bool IsMale { get; set; }
+            public ConsoleColor Enums { get; set; }
         }
 
         public class SubDumyTest
