@@ -41,6 +41,8 @@ namespace RedisUsage.UnitTest.CqrsCoreMockupTest
             public Guid Cmnd { get; set; }
             public bool IsMale { get; set; }
             public ConsoleColor Enums { get; set; }
+
+            public SubDumyTest [] ArrayTest { get; set; }
         }
 
         public class SubDumyTest

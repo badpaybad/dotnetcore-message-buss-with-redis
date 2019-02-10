@@ -172,6 +172,11 @@ namespace RedisUsage.CqrsCore.Extensions
                 var elementType = piType.GetElementType();
 
                 var item = BuildDumyDataForProp(elementType, objOrigin);
+                if (item == null)
+                {
+                    item = Activator.CreateInstance(elementType);
+                }
+
                 arr.Add(item);
 
                 return arr.ToArray(elementType);
