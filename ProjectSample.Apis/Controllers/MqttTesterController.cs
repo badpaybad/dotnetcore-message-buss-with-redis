@@ -22,6 +22,21 @@ namespace ProjectSample.Apis.Controllers
             await InitClient();
 
             string topic = _mqttClient.Options.ClientId;
+
+            //VietNguyen MQTT server
+            //topic = "emissions";
+            msg = JsonConvert.SerializeObject(new TestForVietNguyen()
+            {
+                device_id = 211284,
+                emissions = 12.234,
+                velocity = new TestForVietNguyen.Velocity { x = 1, y = 2 },
+                location = new TestForVietNguyen.Location
+                {
+                    lat = 3,
+                    lon = 4
+                }
+            });
+
             var applicationMessage = new MqttApplicationMessageBuilder()
               .WithTopic(topic)
               .WithPayload(msg)
@@ -45,6 +60,9 @@ namespace ProjectSample.Apis.Controllers
 
                 var mqttHost = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1";
 
+                //VietNguyen MQTT server
+                //mqttHost = "mqtt.edsolabs.com:1883";
+                ///mqttHost = "lb-mqtt-broker-61454191.ap-southeast-1.elb.amazonaws.com";
 
                 var option = new MQTTnet.Client.MqttClientOptions
                 {
@@ -84,5 +102,24 @@ namespace ProjectSample.Apis.Controllers
             }
         }
 
+    }
+
+    public class TestForVietNguyen
+    {
+        public class Velocity
+        {
+            public int x { get; set; }
+            public int y { get; set; }
+        }
+        public class Location
+        {
+            public double lat { get; set; }
+            public double lon { get; set; }
+        }
+
+        public Velocity velocity { get; set; }
+        public double emissions { get; set; }
+        public Location location { get; set; }
+        public int device_id { get; set; }
     }
 }
