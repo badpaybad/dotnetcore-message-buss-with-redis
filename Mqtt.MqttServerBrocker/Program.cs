@@ -12,6 +12,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using RedisUsage.CqrsCore.Ef;
+using System.Net.Http;
+using System.Security.Cryptography;
+using System.Linq;
 
 namespace Mqtt.MqttServerBrocker
 {
@@ -24,7 +27,10 @@ namespace Mqtt.MqttServerBrocker
 
         public static void Main(string[] args)
         {
-           
+            //TestMovoHubAuth();
+            //Console.ReadLine();
+            //return;
+
             var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
             var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
             var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
@@ -102,6 +108,85 @@ namespace Mqtt.MqttServerBrocker
 
         }
 
+        private static void TestMovoHubAuth()
+        {
+            //https://butaneko.sakura.ne.jp/auth/
+
+            using (var c = new HttpClient())
+            {
+                c.BaseAddress = new Uri("https://butaneko.sakura.ne.jp/auth/");
+
+                c.DefaultRequestHeaders.Clear();
+
+                HttpRequestMessage _1stRequest = new HttpRequestMessage(HttpMethod.Get, c.BaseAddress);
+                _1stRequest.Content = new StringContent("", Encoding.UTF8, "text/plain");
+
+                var _1stResponse = c.SendAsync(_1stRequest).GetAwaiter().GetResult();
+
+              
+                var realm = _1stResponse.Headers.GetValues("WWW-Authentication").ToList().FirstOrDefault();
+
+                var arrRealm = realm.Split(new[] { '\"' });
+                if (arrRealm.Length > 1)
+                {
+                    realm = arrRealm[1];
+                }
+                else
+                {
+                    realm = "duks-tacho";
+                }
+                
+                var simId = "T8981200017251102088";
+                // simId = "1200017251102088";
+                // simId = "8981200017251102088";
+                simId = "sora";
+                var digest = GetMd5(realm + ":" + simId);
+
+                if ((int)_1stResponse.StatusCode == 401)
+                {
+
+                    using (var c1 = new HttpClient())
+                    {
+                        c1.BaseAddress = new Uri("https://butaneko.sakura.ne.jp/auth/");
+
+                        c1.DefaultRequestHeaders.Clear();
+
+                        c1.DefaultRequestHeaders.Add("Authorization", "Basic " + digest);
+
+                        HttpRequestMessage msgRequest1 = new HttpRequestMessage(HttpMethod.Get, c.BaseAddress);
+                        msgRequest1.Content = new StringContent("", Encoding.UTF8, "text/plain");
+
+                        var response1 = c.SendAsync(msgRequest1).GetAwaiter().GetResult();
+
+                        string responsJson = JsonConvert.SerializeObject(response1);
+
+                        Console.WriteLine(responsJson);
+                    }
+                }
+            }
+        }
+
+        static string GetMd5(string input)
+        {
+            MD5 md5Hash = MD5.Create();
+            //
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+
+        }
 
         private static MqttServerOptions BuildMqttServerOptions()
         {
@@ -270,6 +355,6 @@ namespace Mqtt.MqttServerBrocker
             return Task.FromResult(retainedMessages);
         }
 
-  
+
     }
 }
