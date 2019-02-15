@@ -29,19 +29,36 @@ namespace RedisUsage.UnitTest.CqrsCoreMockupTest
 
             match_datas = database.GetCollection<match_data>("match_data");
 
+
+            SampleMongoDocs = database.GetCollection<SampleMongoDoc>("SampleMongoDoc");
+
         }
 
         public IMongoCollection<match_data> match_datas { get; set; }
+
+        public IMongoCollection<SampleMongoDoc> SampleMongoDocs { get; set; }
 
         public void Dispose()
         {
         }
     }
 
+    public class SampleMongoDoc
+    {
+        [BsonId]
+        public Guid Id { get; set; }
+
+        public string SampleName { get; set; }
+        
+        [BsonElement("SampleVersion")]
+        public int? SampleVersion { get; set; }
+
+    }
+
     public class match_data
     {
         [BsonId]
-        //[BsonRepresentation(BsonType.ObjectId)]
+        [BsonRepresentation(BsonType.Int32)]
         public int id { get; set; }
 
         [BsonElement("home_team")]
@@ -67,6 +84,8 @@ namespace RedisUsage.UnitTest.CqrsCoreMockupTest
 
         [BsonElement("have_live")]
         public string have_live { get; set; }
+
+        public Guid UniqueId { get; set; }
     }
 
     [TestClass]
@@ -79,15 +98,33 @@ namespace RedisUsage.UnitTest.CqrsCoreMockupTest
             //
             using (var db = new MyMongoDbContext("mongodb://localhost:27017/odds_total", "odds_total"))
             {
-                var itm = db.match_datas.Find(i => true).FirstOrDefault();
+                var itm = db.match_datas.Find(i => i.id== 322585665).FirstOrDefault();
 
                 string value = JsonConvert.SerializeObject(itm);
 
                 itm.have_live = "No";
+                itm.UniqueId = Guid.NewGuid();
                 db.match_datas.ReplaceOne(i => i.id == itm.id, itm);
 
 
                 Console.WriteLine(value);
+
+                db.SampleMongoDocs.InsertOne(new SampleMongoDoc()
+                {
+                    Id = Guid.NewGuid(),
+                    //SampleName = "Version 1",
+                    SampleVersion = null
+                });
+
+                //var sall = db.SampleMongoDocs.Find(i => true).ToList();
+
+                Guid id1 = Guid.Parse("28fa464c-b121-4c56-929b-af4e746e8802");
+                var s1 = db.SampleMongoDocs.Find(i => i.Id == id1)
+                    .FirstOrDefault();
+
+                //Guid id2 = Guid.Parse("9c5878eb-7e0a-424d-9ffe-371923fdfb90");
+                //var s2 = db.SampleMongoDocs.Find(i => i.Id == id2)
+                //  .FirstOrDefault();
             }
         }
     }
