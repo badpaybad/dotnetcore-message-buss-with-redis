@@ -27,9 +27,9 @@ namespace Mqtt.MqttServerBrocker
 
         public static void Main(string[] args)
         {
-            //TestMovoHubAuth();
-            //Console.ReadLine();
-            //return;
+            TestMovoHubAuth();
+            Console.ReadLine();
+            return;
 
             var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
             var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
@@ -112,9 +112,11 @@ namespace Mqtt.MqttServerBrocker
         {
             //https://butaneko.sakura.ne.jp/auth/
 
+            var url = "https://butaneko.sakura.ne.jp";
+           
             using (var c = new HttpClient())
             {
-                c.BaseAddress = new Uri("https://butaneko.sakura.ne.jp/auth/");
+                c.BaseAddress = new Uri(url+"/auth/");
 
                 c.DefaultRequestHeaders.Clear();
 
@@ -147,7 +149,7 @@ namespace Mqtt.MqttServerBrocker
 
                     using (var c1 = new HttpClient())
                     {
-                        c1.BaseAddress = new Uri("https://butaneko.sakura.ne.jp/auth/");
+                        c1.BaseAddress = c.BaseAddress;
 
                         c1.DefaultRequestHeaders.Clear();
 

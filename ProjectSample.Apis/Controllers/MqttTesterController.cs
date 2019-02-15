@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MQTTnet;
+using MQTTnet.Client;
 using Newtonsoft.Json;
 using RedisUsage.CqrsCore.Ef;
 
@@ -57,20 +58,30 @@ namespace ProjectSample.Apis.Controllers
             if (_mqttClient == null)
             {
                 _mqttClient = _mqttfactory.CreateMqttClient();
-
+                
                 var mqttHost = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1";
 
                 //VietNguyen MQTT server
                 //mqttHost = "mqtt.edsolabs.com:1883";
-                ///mqttHost = "lb-mqtt-broker-61454191.ap-southeast-1.elb.amazonaws.com";
+                //mqttHost = "lb-mqtt-broker-61454191.ap-southeast-1.elb.amazonaws.com";
+            
+                var uid = "xxx";
+                var pwd = "xxx";
 
                 var option = new MQTTnet.Client.MqttClientOptions
                 {
                     ChannelOptions = new MQTTnet.Client.MqttClientTcpOptions
                     {
-                        Server = mqttHost
+                        Server = mqttHost,
+                        Port = 8888
                     },
                     ClientId = "dudu_" + Guid.NewGuid().ToString(),
+                    Credentials = new MqttClientCredentials()
+                    {
+                        Username = uid,
+                        Password = pwd
+                    }
+
                     //KeepAlivePeriod = new TimeSpan(0, 0, 1)
                 };
 
@@ -89,7 +100,7 @@ namespace ProjectSample.Apis.Controllers
                     _mqttClient.ConnectAsync(option);
                 };
 
-                await _mqttClient.ConnectAsync(option);
+                var connectedReponse = await _mqttClient.ConnectAsync(option);
 
                 await _mqttClient.SubscribeAsync(new List<TopicFilter>() {
                     new TopicFilterBuilder()
