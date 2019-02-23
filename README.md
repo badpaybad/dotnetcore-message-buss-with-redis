@@ -53,10 +53,10 @@ sequence diagram for device https://drive.google.com/drive/folders/1w_mDlZ-WnSTF
 
 Basic follow
 1. Device must call to Registration server to get public-key for encrypt data. It will also identify the client with deviceid
-This will to off line truth in factory.
+This will to do off-line truth in device factory.
 If public-key stolen, bring device to factory to remove old one then register new
 
-Device must check public-key in ROM if existed, do init MQTT client to connect to valid deviceid, public-key by QMTT server
+Device must check public-key in ROM if existed, do init MQTT client to connect to valid deviceid and public-key by QMTT server
 
 2. Device must init MQTT client with clientid={deviceid}+{public-key} to received msg from sever
 Device must subscribe topic {deviceid}+{public-key} to received msg from sever
