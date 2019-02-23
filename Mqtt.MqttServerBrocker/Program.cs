@@ -195,12 +195,12 @@ namespace Mqtt.MqttServerBrocker
             var options = new MqttServerOptions
             {
                 ConnectionValidator = p =>
-                {
+                {                  
                     //if (p.ClientId == "SpecialClient")
                     //{
                     //    if (p.Username != "USER" || p.Password != "PASS")
                     //    {
-                    //        p.ReturnCode = MqttConnectReturnCode. ConnectionRefusedBadUsernameOrPassword;
+                        p.ReturnCode = MqttConnectReturnCode. ConnectionRefusedBadUsernameOrPassword;
                     //    }
                     //}
                 },
@@ -246,7 +246,7 @@ namespace Mqtt.MqttServerBrocker
             //Console.WriteLine("Sender");
             //Console.WriteLine(JsonConvert.SerializeObject(sender));
             //Console.WriteLine("MqttApplicationMessageReceivedEventArgs");
-
+            
             var sw = Stopwatch.StartNew();
             var msgToKafka = new
             {

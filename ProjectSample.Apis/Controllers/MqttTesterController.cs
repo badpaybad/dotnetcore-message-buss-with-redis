@@ -58,7 +58,7 @@ namespace ProjectSample.Apis.Controllers
             if (_mqttClient == null)
             {
                 _mqttClient = _mqttfactory.CreateMqttClient();
-                
+
                 var mqttHost = ConfigurationManagerExtensions.GetValueByKey("Mqtt:Host") ?? "127.0.0.1";
 
                 //VietNguyen MQTT server
