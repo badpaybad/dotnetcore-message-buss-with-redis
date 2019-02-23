@@ -49,4 +49,17 @@ We can add DDD and Eventsourcing in CommandHandler. We can call to Aggregate Rep
 	
 # MQTT with Mqttnet + Kafka or Redis
 
-sequence diagram for device https://drive.google.com/file/d/13bVcwZoPSBVNmtmCR3R4FJR85OIRjEdV/view?usp=sharing
+sequence diagram for device https://drive.google.com/drive/folders/1w_mDlZ-WnSTFn4gtYszzWUnpyBWSpqxt?usp=sharing
+
+Basic follow
+1. Device must call to Registration server to get public-key for encrypt data. It will also identify the client with deviceid
+This will to do off-line truth in device factory.
+If public-key stolen, bring device to factory to remove old one then register new
+
+Device must check public-key in ROM if existed, do init MQTT client to connect to valid deviceid and public-key by QMTT server
+
+2. Device must init MQTT client with clientid={deviceid}+{public-key} to received msg from sever
+Device must subscribe topic {deviceid}+{public-key} to received msg from sever
+Device must pass network credential username=deviceid, password=public-key when do connect or reconnect if disconnected.
+Topic to publish message to server : topic_name/deviceid/public-key
+payload device must encrypt payload by public-key before send to topic
