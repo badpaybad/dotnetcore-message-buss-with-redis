@@ -241,7 +241,7 @@ namespace Mqtt.MqttServerBrocker
 
         private static async void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-
+            
             //Console.WriteLine("Server Received: Should implement code to push data to Kafka");
             //Console.WriteLine("Sender");
             //Console.WriteLine(JsonConvert.SerializeObject(sender));
