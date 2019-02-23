@@ -49,3 +49,4 @@ We can add DDD and Eventsourcing in CommandHandler. We can call to Aggregate Rep
 	
 # MQTT with Mqttnet + Kafka or Redis
 
+sequence diagram for device https://drive.google.com/file/d/13bVcwZoPSBVNmtmCR3R4FJR85OIRjEdV/view?usp=sharing
