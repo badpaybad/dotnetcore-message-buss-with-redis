@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RedisUsage.CqrsCore.Mqtt;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,9 +34,19 @@ namespace Mqtt.DeviceRegisterApis.Controllers
                 var publicKey = RSA.ExportParameters(false);
                 var privateKey = RSA.ExportParameters(true);
 
-                var jsonPublicKey = JsonConvert.SerializeObject(publicKey);
-                var jsonPrivateKey = JsonConvert.SerializeObject(privateKey);
+                var publicKeyComponent = ByteConverter.GetString(publicKey.Modulus);
+
+                var pairKey = new MqttCryptorPair
+                {
+                    DeviceId = deviceId,
+                    RSAParametersPublic = JsonConvert.SerializeObject(publicKey),
+                    RSAParametersPrivate = JsonConvert.SerializeObject(privateKey)
+                };
                 //must store deviceid, publicKey, privateKey to db, this db should be share internal system to other can identity deviceid
+
+                RedisUsage.RedisServices.RedisServices.HashSet("RSA",
+                    new System.Collections.Generic.KeyValuePair<string, string>(deviceId + "." + publicKeyComponent
+                    , JsonConvert.SerializeObject(pairKey)));
 
                 //encryptedData = RSAEncrypt(dataToEncrypt, publicKey);
 
@@ -47,7 +58,7 @@ namespace Mqtt.DeviceRegisterApis.Controllers
                 ////Display the decrypted plaintext to the console. 
                 //Console.WriteLine("Decrypted plaintext: {0}", ByteConverter.GetString(decryptedData));
 
-                return new JsonResult(publicKey);
+                return new JsonResult(publicKeyComponent);
             }
 
 
@@ -55,7 +66,7 @@ namespace Mqtt.DeviceRegisterApis.Controllers
 
         public static byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding = false)
         {
-            
+
             try
             {
                 byte[] encryptedData;

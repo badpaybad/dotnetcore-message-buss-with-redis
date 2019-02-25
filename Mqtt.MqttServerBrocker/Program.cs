@@ -27,10 +27,6 @@ namespace Mqtt.MqttServerBrocker
 
         public static void Main(string[] args)
         {
-            TestMovoHubAuth();
-            Console.ReadLine();
-            return;
-
             var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
             var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
             var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
@@ -113,10 +109,10 @@ namespace Mqtt.MqttServerBrocker
             //https://butaneko.sakura.ne.jp/auth/
 
             var url = "https://butaneko.sakura.ne.jp";
-           
+
             using (var c = new HttpClient())
             {
-                c.BaseAddress = new Uri(url+"/auth/");
+                c.BaseAddress = new Uri(url + "/auth/");
 
                 c.DefaultRequestHeaders.Clear();
 
@@ -125,7 +121,7 @@ namespace Mqtt.MqttServerBrocker
 
                 var _1stResponse = c.SendAsync(_1stRequest).GetAwaiter().GetResult();
 
-              
+
                 var realm = _1stResponse.Headers.GetValues("WWW-Authentication").ToList().FirstOrDefault();
 
                 var arrRealm = realm.Split(new[] { '\"' });
@@ -137,7 +133,7 @@ namespace Mqtt.MqttServerBrocker
                 {
                     realm = "duks-tacho";
                 }
-                
+
                 var simId = "T8981200017251102088";
                 // simId = "1200017251102088";
                 // simId = "8981200017251102088";
@@ -195,14 +191,36 @@ namespace Mqtt.MqttServerBrocker
             var options = new MqttServerOptions
             {
                 ConnectionValidator = p =>
-                {                  
+                {
                     //if (p.ClientId == "SpecialClient")
                     //{
                     //    if (p.Username != "USER" || p.Password != "PASS")
                     //    {
-                        p.ReturnCode = MqttConnectReturnCode. ConnectionRefusedBadUsernameOrPassword;
+
+                    //MqttCryptorPair
+
                     //    }
                     //}
+
+                    try
+                    {
+                        var rsaRedis = RedisUsage.RedisServices.RedisServices.HashGet("RSA", p.Username + "." + p.Password);
+
+                        if (string.IsNullOrEmpty(rsaRedis))
+                        {
+                            p.ReturnCode = MqttConnectReturnCode.ConnectionRefusedBadUsernameOrPassword;
+                        }
+                        else
+                        {
+                            p.ReturnCode = MqttConnectReturnCode.ConnectionAccepted;
+                        }
+                    }
+                    catch
+                    {
+                        p.ReturnCode = MqttConnectReturnCode.ConnectionRefusedServerUnavailable;
+                    }
+
+
                 },
 
                 Storage = new RetainedMessageHandler(),
@@ -241,12 +259,12 @@ namespace Mqtt.MqttServerBrocker
 
         private static async void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            
+
             //Console.WriteLine("Server Received: Should implement code to push data to Kafka");
             //Console.WriteLine("Sender");
             //Console.WriteLine(JsonConvert.SerializeObject(sender));
             //Console.WriteLine("MqttApplicationMessageReceivedEventArgs");
-            
+
             var sw = Stopwatch.StartNew();
             var msgToKafka = new
             {
