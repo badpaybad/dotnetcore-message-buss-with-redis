@@ -26,8 +26,6 @@ namespace Mqtt.DeviceRegisterApis.Controllers
             //public and private key data.
             using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(1024))
             {
-
-
                 //Pass the data to ENCRYPT, the public key information 
                 //(using RSACryptoServiceProvider.ExportParameters(false),
                 //and a boolean flag specifying no OAEP padding.
@@ -48,15 +46,15 @@ namespace Mqtt.DeviceRegisterApis.Controllers
                     new System.Collections.Generic.KeyValuePair<string, string>(deviceId + "." + publicKeyComponent
                     , JsonConvert.SerializeObject(pairKey)));
 
-                //encryptedData = RSAEncrypt(dataToEncrypt, publicKey);
+                encryptedData = RSAEncrypt(dataToEncrypt, publicKey);
 
-                ////Pass the data to DECRYPT, the private key information 
-                ////(using RSACryptoServiceProvider.ExportParameters(true),
-                ////and a boolean flag specifying no OAEP padding.
-                //decryptedData = RSADecrypt(encryptedData, RSA.ExportParameters(true));
+                //Pass the data to DECRYPT, the private key information 
+                //(using RSACryptoServiceProvider.ExportParameters(true),
+                //and a boolean flag specifying no OAEP padding.
+                decryptedData = RSADecrypt(encryptedData, privateKey);
 
-                ////Display the decrypted plaintext to the console. 
-                //Console.WriteLine("Decrypted plaintext: {0}", ByteConverter.GetString(decryptedData));
+                //Display the decrypted plaintext to the console. 
+                Console.WriteLine("Decrypted plaintext: {0}", ByteConverter.GetString(decryptedData));
 
                 return Content(publicKeyComponent);
             }
