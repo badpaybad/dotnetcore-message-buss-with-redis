@@ -58,7 +58,7 @@ namespace Mqtt.DeviceRegisterApis.Controllers
                 ////Display the decrypted plaintext to the console. 
                 //Console.WriteLine("Decrypted plaintext: {0}", ByteConverter.GetString(decryptedData));
 
-                return new JsonResult(publicKeyComponent);
+                return Content(publicKeyComponent);
             }
 
 

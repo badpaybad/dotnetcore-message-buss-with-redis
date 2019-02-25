@@ -100,3 +100,4 @@
 /Mqtt.MqttServerBrocker/sequence diagram/mqtt iot.vpp.bak_017d
 /Mqtt.DeviceRegisterApis/bin/Debug/netcoreapp2.2
 /Mqtt.DeviceRegisterApis/obj
+/Embeded.Simulator/bin/Debug/netcoreapp2.2
