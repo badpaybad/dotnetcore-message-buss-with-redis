@@ -6,6 +6,7 @@ namespace RedisUsage.CqrsCore.Mqtt
 {
    public class MqttCryptorPair
     {
+        public string TopicForClient { get; set; }
         public string DeviceId { get; set; }
         public string RSAParametersPublic { get; set; }
         public string RSAParametersPrivate { get; set; }

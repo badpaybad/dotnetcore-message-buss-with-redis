@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RedisUsage.CqrsCore.Ef;
 
 namespace Mqtt.DeviceRegisterApis
 {
@@ -31,6 +32,17 @@ namespace Mqtt.DeviceRegisterApis
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
+            var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
+            var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
+            int? redisPortInt = null;
+            if (!string.IsNullOrEmpty(redisPort))
+            {
+                redisPortInt = int.Parse(redisPort);
+            }
+
+            RedisUsage.RedisServices.RedisServices.Init(redisHost, redisPortInt, redisPwd);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

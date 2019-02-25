@@ -4,17 +4,16 @@ using MQTTnet;
 using MQTTnet.Protocol;
 using MQTTnet.Server;
 using Newtonsoft.Json;
+using RedisUsage.CqrsCore.Ef;
+using RedisUsage.CqrsCore.Extensions;
+using RedisUsage.CqrsCore.Mqtt;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
-using RedisUsage.CqrsCore.Ef;
-using System.Net.Http;
-using System.Security.Cryptography;
-using System.Linq;
 
 namespace Mqtt.MqttServerBrocker
 {
@@ -27,6 +26,8 @@ namespace Mqtt.MqttServerBrocker
 
         public static void Main(string[] args)
         {
+            //TestRsaEncryptDecryptUtf8(); return;
+
             var redisHost = ConfigurationManagerExtensions.GetValueByKey("Redis:Host") ?? "127.0.0.1";
             var redisPort = ConfigurationManagerExtensions.GetValueByKey("Redis:Port") ?? "6379";
             var redisPwd = ConfigurationManagerExtensions.GetValueByKey("Redis:Password") ?? string.Empty;
@@ -104,87 +105,17 @@ namespace Mqtt.MqttServerBrocker
 
         }
 
-        private static void TestMovoHubAuth()
-        {
-            //https://butaneko.sakura.ne.jp/auth/
+        //private static void TestRsaEncryptDecryptUtf8()
+        //{
+        //    RSAParameters publicKey;
+        //    RSAParameters privateKey;
 
-            var url = "https://butaneko.sakura.ne.jp";
+        //    StringCipher.RsaGenerate(out publicKey, out privateKey);
 
-            using (var c = new HttpClient())
-            {
-                c.BaseAddress = new Uri(url + "/auth/");
+        //    var stringBase64 = StringCipher.RsaEncrypt("test thoi ma", publicKey);
 
-                c.DefaultRequestHeaders.Clear();
-
-                HttpRequestMessage _1stRequest = new HttpRequestMessage(HttpMethod.Get, c.BaseAddress);
-                _1stRequest.Content = new StringContent("", Encoding.UTF8, "text/plain");
-
-                var _1stResponse = c.SendAsync(_1stRequest).GetAwaiter().GetResult();
-
-
-                var realm = _1stResponse.Headers.GetValues("WWW-Authentication").ToList().FirstOrDefault();
-
-                var arrRealm = realm.Split(new[] { '\"' });
-                if (arrRealm.Length > 1)
-                {
-                    realm = arrRealm[1];
-                }
-                else
-                {
-                    realm = "duks-tacho";
-                }
-
-                var simId = "T8981200017251102088";
-                // simId = "1200017251102088";
-                // simId = "8981200017251102088";
-                simId = "sora";
-                var digest = GetMd5(realm + ":" + simId);
-
-                if ((int)_1stResponse.StatusCode == 401)
-                {
-
-                    using (var c1 = new HttpClient())
-                    {
-                        c1.BaseAddress = c.BaseAddress;
-
-                        c1.DefaultRequestHeaders.Clear();
-
-                        c1.DefaultRequestHeaders.Add("Authorization", "Basic " + digest);
-
-                        HttpRequestMessage msgRequest1 = new HttpRequestMessage(HttpMethod.Get, c.BaseAddress);
-                        msgRequest1.Content = new StringContent("", Encoding.UTF8, "text/plain");
-
-                        var response1 = c.SendAsync(msgRequest1).GetAwaiter().GetResult();
-
-                        string responsJson = JsonConvert.SerializeObject(response1);
-
-                        Console.WriteLine(responsJson);
-                    }
-                }
-            }
-        }
-
-        static string GetMd5(string input)
-        {
-            MD5 md5Hash = MD5.Create();
-            //
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data 
-            // and format each one as a hexadecimal string.
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            // Return the hexadecimal string.
-            return sBuilder.ToString();
-
-        }
+        //    var decrypt = StringCipher.RsaDecrypt(stringBase64, privateKey);
+        //}
 
         private static MqttServerOptions BuildMqttServerOptions()
         {
@@ -204,7 +135,9 @@ namespace Mqtt.MqttServerBrocker
 
                     try
                     {
-                        var rsaRedis = RedisUsage.RedisServices.RedisServices.HashGet("RSA", p.Username + "." + p.Password);
+                        //deviceId + "/" + GetMd5(publicKeyComponent);
+                        var redisForPublicKey = p.Username + "/" + p.Password;
+                        var rsaRedis = RedisUsage.RedisServices.RedisServices.HashGet("RSA", redisForPublicKey);
 
                         if (string.IsNullOrEmpty(rsaRedis))
                         {
@@ -259,24 +192,11 @@ namespace Mqtt.MqttServerBrocker
 
         private static async void _mqttServer_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-
             //Console.WriteLine("Server Received: Should implement code to push data to Kafka");
             //Console.WriteLine("Sender");
             //Console.WriteLine(JsonConvert.SerializeObject(sender));
             //Console.WriteLine("MqttApplicationMessageReceivedEventArgs");
 
-            var sw = Stopwatch.StartNew();
-            var msgToKafka = new
-            {
-                PayLoadStringUTF8 = Encoding.UTF8.GetString(e.ApplicationMessage.Payload),
-                ClientMsg = e
-            };
-
-            string text = JsonConvert.SerializeObject(msgToKafka);
-
-            //can do with redis queue
-            RedisUsage.RedisServices.RedisServices.TryEnqueue(e.ClientId, text);
-            Console.WriteLine($"Pushed into Redis MSG: '{text}' to QUEUE: {e.ClientId} in miliseconds: {sw.ElapsedMilliseconds}");
 
             // or use kafka
             //using (var producer = new Producer<Null, string>(_mqttConfig, null, new StringSerializer(Encoding.UTF8)))
@@ -288,6 +208,45 @@ namespace Mqtt.MqttServerBrocker
             //sw.Stop();
 
             //Console.WriteLine($"Pushed into Kafka MSG: '{text}' to TOPIC: {e.ClientId} in miliseconds: {sw.ElapsedMilliseconds}");
+
+            //consumer for kafka or redis should do bellow logic
+            try
+            {
+                var keyAndMsgEncrypted = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+
+                var arr = keyAndMsgEncrypted.Split('.');
+                var hashMsg = arr[0];
+                var msgEncrypted = arr[1];
+
+                var redisForPublicKey = e.ClientId;//deviceid.md5(public-key)
+
+                var rsaRedis = RedisUsage.RedisServices.RedisServices.HashGet("RSA", redisForPublicKey);
+
+                MqttCryptorPair pairKey = JsonConvert.DeserializeObject<MqttCryptorPair>(rsaRedis);
+
+                var publicKey = JsonConvert.DeserializeObject<RSAParameters>(pairKey.RSAParametersPublic);
+                var privateKey = JsonConvert.DeserializeObject<RSAParameters>(pairKey.RSAParametersPrivate);
+
+                var originMsg = StringCipher.RsaDecrypt(msgEncrypted, privateKey);
+
+                if (hashMsg != StringCipher.GetMd5Hash(originMsg))
+                {
+                    throw new Exception("Not valid hash");
+                }
+
+                Console.WriteLine("Decrypted");
+                Console.WriteLine(originMsg);
+
+                //can do with redis queue
+                RedisUsage.RedisServices.RedisServices.TryEnqueue(e.ApplicationMessage.Topic, originMsg);
+            }
+            catch
+            {
+
+
+            }
+
+
         }
 
 
@@ -299,16 +258,20 @@ namespace Mqtt.MqttServerBrocker
         private static void _mqttServer_ClientSubscribedTopic(object sender, MqttClientSubscribedTopicEventArgs e)
         {
             //throw new NotImplementedException();
+
+            Console.WriteLine(e.ClientId + " subscribe topic " + e.TopicFilter.Topic);
         }
 
         private static void _mqttServer_ClientDisconnected(object sender, MqttClientDisconnectedEventArgs e)
         {
             //throw new NotImplementedException();
+
         }
 
         private static void _mqttServer_ClientConnected(object sender, MqttClientConnectedEventArgs e)
         {
             //throw new NotImplementedException();
+            Console.WriteLine(e.ClientId + " connected");
         }
 
         #region tesing only

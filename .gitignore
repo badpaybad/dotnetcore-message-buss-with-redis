@@ -122,3 +122,5 @@
 /Mqtt.MqttServerBrocker/sequence diagram/mqtt iot.vpp.bak_035d
 /Mqtt.MqttServerBrocker/sequence diagram/mqtt iot.vpp.bak_034d
 /Mqtt.MqttServerBrocker/sequence diagram/mqtt iot.vpp.bak_033d
+/Mqtt.DeviceSimulator/bin/Debug/netcoreapp2.2
+/Mqtt.DeviceSimulator/obj
